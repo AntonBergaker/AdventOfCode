@@ -17,7 +17,8 @@ public class Program {
             Day10.SyntaxScoring.Run,
             Day11.DumboOctopus.Run,
             Day12.PassagePathing.Run,
-            Day13.TransparentOrigami.Run
+            Day13.TransparentOrigami.Run,
+            Day14.ExtendedPolymerization.Run,
         };
 
         foreach (var method in methods) {
