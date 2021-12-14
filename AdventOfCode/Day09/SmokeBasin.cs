@@ -13,7 +13,7 @@ static class SmokeBasin {
         string[] input = File.ReadAllLines(Path.Join("Day09", "input.txt"));
         int width = input[0].Length;
         int height = input.Length;
-        int[,] data = new int[width, height];
+        Grid<int> data = new(width, height);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 data[x, y] = int.Parse(input[y][x].ToString());
@@ -23,7 +23,7 @@ static class SmokeBasin {
         {
             Console.WriteLine("Smoke Basin Part 1");
 
-            int total = GetLowestPoints(data).Select(x => data[x.X, x.Y] + 1).Sum();
+            int total = GetLowestPoints(data).Select(x => data[x] + 1).Sum();
 
             Console.WriteLine($"Sum of risk level: {total}\n");
         }
@@ -33,7 +33,7 @@ static class SmokeBasin {
             var lowPoints = GetLowestPoints(data);
 
             // Make an array of bools to mark where we've been
-            bool[,] visited = new bool[width, height];
+            Grid<bool> visited = new(width, height);
             List<int> basinSizes = new List<int>();
 
             foreach (VectorInt2 lowPoint in lowPoints) {
@@ -46,15 +46,15 @@ static class SmokeBasin {
                     VectorInt2 pos = nextPositions.Pop();
                     var nearby = GetNearbyCoords(pos, width, height);
                     foreach (VectorInt2 near in nearby) {
-                        if (visited[near.X, near.Y]) {
+                        if (visited[near]) {
                             continue;
                         }
 
-                        if (data[near.X, near.Y] == 9) {
+                        if (data[near] == 9) {
                             continue;
                         }
 
-                        visited[near.X, near.Y] = true;
+                        visited[near] = true;
                         size++;
                         nextPositions.Push(near);
                     }
@@ -91,16 +91,16 @@ static class SmokeBasin {
         return list;
     }
 
-    private static List<VectorInt2> GetLowestPoints(int[,] heightMap) {
-        int width = heightMap.GetLength(0);
-        int height = heightMap.GetLength(1);
+    private static List<VectorInt2> GetLowestPoints(Grid<int> heightMap) {
+        int width = heightMap.Width;
+        int height = heightMap.Height;
         List<VectorInt2> points = new List<VectorInt2>();
 
         // Lol I hate it
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 var nearby = GetNearbyCoords(new(x, y), width, height);
-                int min = nearby.Select(near => heightMap[near.X, near.Y]).Min();
+                int min = nearby.Select(near => heightMap[near]).Min();
 
                 if (heightMap[x, y] < min) {
                     points.Add(new(x, y));

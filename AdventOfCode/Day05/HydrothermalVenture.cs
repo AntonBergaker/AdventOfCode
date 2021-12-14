@@ -47,7 +47,7 @@ static class HydrothermalVenture {
     }
 
     private static int CalculateDangerAreas(List<Line> lines, int gridSize, Func<Line, bool> shouldKeepLineFunc) {
-        int[,] grid = new int[gridSize, gridSize];
+        Grid<int> grid = new (gridSize, gridSize);
 
         foreach (Line line in lines) {
             if (shouldKeepLineFunc(line) == false) {
@@ -59,12 +59,12 @@ static class HydrothermalVenture {
             int magnitude = line.Magnitude;
 
             for (int i = 0; i <= magnitude; i++) {
-                grid[p.X, p.Y]++;
+                grid[p]++;
                 p += direction;
             }
         }
 
-        return grid.Cast<int>().Count(number => number >= 2);
+        return grid.Count(number => number >= 2);
     }
 
 }

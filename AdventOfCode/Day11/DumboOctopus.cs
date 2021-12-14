@@ -32,16 +32,9 @@ static class DumboOctopus {
             int allFlashAt = -1;
             for (int i = 0; i < 100_000; i++) {
                 SimulateOctopuses(part2Data);
-                bool allZeroes = true;
-                foreach (int value in part2Data) {
-                    if (value != 0) {
-                        allZeroes = false;
-                        break;
-                    }
-                }
 
-                if (allZeroes) {
-                    allFlashAt = i;
+                if (part2Data.All(x => x == 0)) {
+                    allFlashAt = i + 1;
                     break;
                 }
             }
@@ -57,8 +50,8 @@ static class DumboOctopus {
         HashSet<VectorInt2> flashedThisStep = new();
         
         void IncrementOctopusAt(VectorInt2 pos) {
-            data[pos.X, pos.Y] += 1;
-            if (data[pos.X, pos.Y] == 10) {
+            data[pos] += 1;
+            if (data[pos] == 10) {
                 totalFlashes++;
                 flashedThisStep.Add(pos);
                 var nearby = GetNearbyCoords(pos, data.Width, data.Height);
@@ -77,7 +70,7 @@ static class DumboOctopus {
         }
 
         foreach (VectorInt2 pos in flashedThisStep) {
-            data[pos.X, pos.Y] = 0;
+            data[pos] = 0;
         }
 
         return totalFlashes;
