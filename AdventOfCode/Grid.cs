@@ -35,6 +35,8 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
     public Grid(VectorInt2 size) : this(size.X, size.Y) {
     }
 
+    public VectorInt2 Size => new VectorInt2(Width, Height);
+
     public IEnumerator<T> GetEnumerator() {
         return data.Cast<T>().GetEnumerator();
     }
@@ -47,6 +49,21 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
         Grid<T> clone = new(Width, Height);
         Array.Copy(data, clone.data, data.Length);
         return clone;
+    }
+
+    public IEnumerable<VectorInt2> GetPositionNeighbors(VectorInt2 pos) {
+        if (pos.X > 0) {
+            yield return pos + new VectorInt2(-1, 0);
+        }
+        if (pos.X < Width - 1) {
+            yield return pos + new VectorInt2(1, 0);
+        }
+        if (pos.Y > 0) {
+            yield return pos + new VectorInt2(0, -1);
+        }
+        if (pos.Y < Height - 1) {
+            yield return pos + new VectorInt2(0, 1);
+        }
     }
 
     public string ToGridString() {
@@ -69,5 +86,13 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
 
     object ICloneable.Clone() {
         return this.Clone();
+    }
+
+    public void SetAll(T value) {
+        for (int x = 0; x < Width; x++) {
+            for (int y = 0; y < Height; y++) {
+                data[x, y] = value;
+            }
+        }
     }
 }

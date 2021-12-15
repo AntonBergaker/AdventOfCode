@@ -19,6 +19,7 @@ public class Program {
             Day12.PassagePathing.Run,
             Day13.TransparentOrigami.Run,
             Day14.ExtendedPolymerization.Run,
+            Day15.Chiton.Run,
         };
 
         foreach (var method in methods) {

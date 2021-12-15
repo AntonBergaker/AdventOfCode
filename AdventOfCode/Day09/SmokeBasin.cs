@@ -44,7 +44,7 @@ static class SmokeBasin {
 
                 while (nextPositions.Count > 0) {
                     VectorInt2 pos = nextPositions.Pop();
-                    var nearby = GetNearbyCoords(pos, width, height);
+                    var nearby = data.GetPositionNeighbors(pos);
                     foreach (VectorInt2 near in nearby) {
                         if (visited[near]) {
                             continue;
@@ -71,26 +71,6 @@ static class SmokeBasin {
 
     }
 
-    private static List<VectorInt2> GetNearbyCoords(VectorInt2 pos, int width, int height) {
-
-        List<VectorInt2> list = new();
-        if (pos.X > 0) {
-            list.Add(pos + new VectorInt2(-1, 0));
-        }
-        if (pos.X < width-1) {
-            list.Add(pos + new VectorInt2(1, 0));
-        }
-        if (pos.Y > 0) {
-            list.Add(pos + new VectorInt2(0, -1));
-        }
-        if (pos.Y < height-1) {
-            list.Add(pos + new VectorInt2(0, 1));
-        }
-
-
-        return list;
-    }
-
     private static List<VectorInt2> GetLowestPoints(Grid<int> heightMap) {
         int width = heightMap.Width;
         int height = heightMap.Height;
@@ -99,7 +79,7 @@ static class SmokeBasin {
         // Lol I hate it
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                var nearby = GetNearbyCoords(new(x, y), width, height);
+                var nearby = heightMap.GetPositionNeighbors(new(x, y));
                 int min = nearby.Select(near => heightMap[near]).Min();
 
                 if (heightMap[x, y] < min) {
