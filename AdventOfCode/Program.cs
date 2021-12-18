@@ -20,6 +20,7 @@ public class Program {
             Day13.TransparentOrigami.Run,
             Day14.ExtendedPolymerization.Run,
             Day15.Chiton.Run,
+            Day16.PacketDecoder.Run,
         };
 
         foreach (var method in methods) {
