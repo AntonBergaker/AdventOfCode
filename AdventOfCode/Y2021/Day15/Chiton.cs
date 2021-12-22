@@ -1,44 +1,42 @@
 ﻿using VectorInt;
 
-namespace AdventOfCode.Day15;
+namespace AdventOfCode.Y2021.Day15;
 
-static class Chiton {
+public class Chiton : AocSolution<Grid<int>> {
+    public override string Name => "Chiton";
 
-    public static void Run() {
-        string[] input = File.ReadAllLines(Path.Join("Day15", "input.txt"));
-        int width = input[0].Length;
-        int height = input.Length;
+    protected override Grid<int> ProcessInput(string input) {
+        string[] lines = input.SplitLines();
+        int width = lines[0].Length;
+        int height = lines.Length;
         Grid<int> data = new(width, height);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                data[x, y] = int.Parse(input[y][x].ToString());
+                data[x, y] = int.Parse(lines[y][x].ToString());
+            }
+        }
+        return data;
+    }
+
+    protected override string Part1Implementation(Grid<int> input) {
+        int lowestRiskValue = GetLowestRiskValue(input);
+
+        return $"Lowest total risk: {lowestRiskValue}";
+    }
+
+    protected override string Part2Implementation(Grid<int> input) {
+        Grid<int> biggerGrid = new Grid<int>(input.Size * new VectorInt2(5));
+
+        for (int x = 0; x < biggerGrid.Width; x++) {
+            for (int y = 0; y < biggerGrid.Height; y++) {
+                // Rolls over on 10, adds 1, to keep it within 1-9
+                biggerGrid[x, y] = 1 + (input[x % input.Width, y % input.Height] + x / input.Width + y / input.Height - 1) % 9;
             }
         }
 
-        {
-            Console.WriteLine("Chiton Part 1");
+        int lowestRiskValue = GetLowestRiskValue(biggerGrid);
 
-            int lowestRiskValue = GetLowestRiskValue(data);
-
-            Console.WriteLine($"Lowest total risk: {lowestRiskValue}\n");
-        }
-
-        {
-            Console.WriteLine("Chiton Part 2");
-
-            Grid<int> biggerGrid = new Grid<int>(data.Size * new VectorInt2(5));
-
-            for (int x = 0; x < biggerGrid.Width; x++) {
-                for (int y = 0; y < biggerGrid.Height; y++) {
-                    // Rolls over on 10, adds 1, to keep it within 1-9
-                    biggerGrid[x, y] = 1 + (data[x % data.Width, y % data.Height] + x / data.Width + y/data.Height - 1) % 9;
-                }
-            }
-
-            int lowestRiskValue = GetLowestRiskValue(biggerGrid);
-
-            Console.WriteLine($"Lowest total risk: {lowestRiskValue}\n");
-        }
+        return $"Lowest total risk: {lowestRiskValue}";
     }
 
     private static int GetLowestRiskValue(Grid<int> data) {

@@ -1,31 +1,30 @@
 ﻿using System.Numerics;
 
-namespace AdventOfCode.Day14; 
+namespace AdventOfCode.Y2021.Day14;
 
-static class ExtendedPolymerization {
+public class ExtendedPolymerization : AocSolution<(string startTemplate, Dictionary<string, char> pairInsertionRules)> {
+    public override string Name => "Extended Polymerization";
 
-    public static void Run() {
-        string[] input = File.ReadAllLines(Path.Join("Day14", "input.txt"));
+    protected override (string startTemplate, Dictionary<string, char> pairInsertionRules) ProcessInput(string input) {
+        string[] lines = input.SplitLines();
 
-        string startTemplate = input[0];
-        Dictionary<string, char> pairInsertionRules = input[2..].Select(x => x.Split("->", StringSplitOptions.TrimEntries)).ToDictionary(x => x[0], x => x[1][0]);
+        string startTemplate = lines[0];
+        Dictionary<string, char> pairInsertionRules = lines[2..].Select(x => x.Split("->", StringSplitOptions.TrimEntries)).ToDictionary(x => x[0], x => x[1][0]);
+        return (startTemplate, pairInsertionRules);
+    }
 
-        {
-            Console.WriteLine("Extended Polymerization Part 1");
+    protected override string Part1Implementation((string startTemplate, Dictionary<string, char> pairInsertionRules) input) {
+        var polymerCount = GetCountOfEachPolymer(input.startTemplate, input.pairInsertionRules, 10);
+        var sortedCount = polymerCount.OrderBy(x => x.Value).ToArray();
 
-            var polymerCount = GetCountOfEachPolymer(startTemplate, pairInsertionRules, 10);
-            var sortedCount = polymerCount.OrderBy(x => x.Value).ToArray();
+        return $"Difference between most common and least common: {sortedCount[^1].Value - sortedCount[0].Value}";
+    }
 
-            Console.WriteLine($"Difference between most common and least common: {sortedCount[^1].Value - sortedCount[0].Value}\n");
-        }
+    protected override string Part2Implementation((string startTemplate, Dictionary<string, char> pairInsertionRules) input) {
+        var polymerCount = GetCountOfEachPolymer(input.startTemplate, input.pairInsertionRules, 40);
+        var sortedCount = polymerCount.OrderBy(x => x.Value).ToArray();
 
-        {
-            Console.WriteLine("Extended Polymerization Part 2");
-            var polymerCount = GetCountOfEachPolymer(startTemplate, pairInsertionRules, 40);
-            var sortedCount = polymerCount.OrderBy(x => x.Value).ToArray();
-
-            Console.WriteLine($"Difference between most common and least common: {sortedCount[^1].Value - sortedCount[0].Value}\n");
-        }
+        return $"Difference between most common and least common: {sortedCount[^1].Value - sortedCount[0].Value}";
     }
 
     private static Dictionary<char, BigInteger> GetCountOfEachPolymer(string input, Dictionary<string, char> pairInsertionRules, int repeats) {

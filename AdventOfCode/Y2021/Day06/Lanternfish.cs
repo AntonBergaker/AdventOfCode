@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
-namespace AdventOfCode.Day06; 
+namespace AdventOfCode.Y2021.Day06;
 
-static class Lanternfish {
+public class Lanternfish : AocSolution<int[]> {
+    public override string Name => "Lanternfish";
 
-    public static void Run() {
-        int[] input = File.ReadAllText(Path.Join("Day06", "input.txt")).Split(',').Select(x => int.Parse(x)).ToArray();
-        {
-            Console.WriteLine("Lanternfish Part 1");
-            BigInteger fishCount = SimulateFishes(input, 80);
-            Console.WriteLine($"Fishies: {fishCount}\n");
-        }
-        {
-            Console.WriteLine("Lanternfish Part 2");
-            BigInteger fishCount = SimulateFishes(input, 256);
-            Console.WriteLine($"Fishies: {fishCount}\n");
-        }
+    protected override int[] ProcessInput(string input) => input.Split(',').Select(x => int.Parse(x)).ToArray();
+
+    protected override string Part1Implementation(int[] input) {
+        BigInteger fishCount = SimulateFishes(input, 80);
+        return $"Fishies: {fishCount}";
     }
+
+    protected override string Part2Implementation(int[] input) {
+        BigInteger fishCount = SimulateFishes(input, 256);
+        return $"Fishies: {fishCount}";
+    }
+
 
     private static BigInteger SimulateFishes(int[] input, int days) {
         int maxAge = 9;
@@ -42,6 +37,6 @@ static class Lanternfish {
             fishByAge[8] = birthingFish;
         }
 
-        return fishByAge.Aggregate(BigInteger.Zero, (i, x) => i+x);
+        return fishByAge.Aggregate(BigInteger.Zero, (i, x) => i + x);
     }
 }

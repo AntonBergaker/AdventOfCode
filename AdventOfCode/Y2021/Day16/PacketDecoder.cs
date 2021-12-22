@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
-namespace AdventOfCode.Day16; 
+namespace AdventOfCode.Y2021.Day16;
 
-static class PacketDecoder {
+public class PacketDecoder : AocSolution<List<bool>> {
+    public override string Name => "Packet Decoder";
 
-    public static void Run() {
-        string text = File.ReadAllText(Path.Join("Day16", "input.txt")).Trim();
+    protected override List<bool> ProcessInput(string input) {
+        string text = input.Trim();
         List<bool> bits = new();
         foreach (char c in text) {
             byte b = byte.Parse(c.ToString(), NumberStyles.HexNumber);
@@ -19,66 +15,64 @@ static class PacketDecoder {
                 b <<= 1;
             }
         }
-        
 
-        {
-            Console.WriteLine("Packet Decoder Part 1");
+        return bits;
+    }
 
-            int ReadTotalVersionNumbers(Packet packet) {
-                int total = packet.Version;
-                if (packet is Operation op) {
-                    total += op.Children.Select(x => ReadTotalVersionNumbers(x)).Sum();
-                }
-
-                return total;
+    protected override string Part1Implementation(List<bool> bits) {
+        int ReadTotalVersionNumbers(Packet packet) {
+            int total = packet.Version;
+            if (packet is Operation op) {
+                total += op.Children.Select(x => ReadTotalVersionNumbers(x)).Sum();
             }
 
-            Packet packet = ReadPacket(new BitReader(bits));
-            int totalVersionNumbers = ReadTotalVersionNumbers(packet);
-
-            Console.WriteLine($"Sum of packet versions: {totalVersionNumbers}\n");
+            return total;
         }
 
-        {
-            Console.WriteLine("Packet Decoder Part 2");
+        Packet packet = ReadPacket(new BitReader(bits));
+        int totalVersionNumbers = ReadTotalVersionNumbers(packet);
 
-            long CalculatePacket(Packet packet) {
-                if (packet is Literal literal) {
-                    return literal.Value;
-                }
+        return $"Sum of packet versions: {totalVersionNumbers}";
+    }
 
-                if (packet is Operation op) {
-                    var calculatedChildren = op.Children.Select(x => CalculatePacket(x)).ToArray();
-                    return op.Type switch {
-                        // Sum all children
-                        0 => calculatedChildren.Sum(),
-                        // Multiply all children
-                        1 => calculatedChildren.Aggregate(1L, (i, x) => i * x),
-                        // Get minimum value
-                        2 => calculatedChildren.Min(),
-                        // Get max value
-                        3 => calculatedChildren.Max(),
-
-                        // Greater than 
-                        5 => calculatedChildren[0] > calculatedChildren[1] ? 1 : 0,
-                        // Lesser than 
-                        6 => calculatedChildren[0] < calculatedChildren[1] ? 1 : 0,
-                        // Equal
-                        7 => calculatedChildren[0] == calculatedChildren[1] ? 1 : 0,
-
-                        // Throw
-                        _ => throw new Exception("Unknown op type")
-                    };
-                }
-
-                throw new Exception("Unknown packet");
+    protected override string Part2Implementation(List<bool> input) {
+        long CalculatePacket(Packet packet) {
+            if (packet is Literal literal) {
+                return literal.Value;
             }
 
-            Packet packet = ReadPacket(new BitReader(bits));
-            long packetValue = CalculatePacket(packet);
+            if (packet is Operation op) {
+                var calculatedChildren = op.Children.Select(x => CalculatePacket(x)).ToArray();
+                return op.Type switch
+                {
+                    // Sum all children
+                    0 => calculatedChildren.Sum(),
+                    // Multiply all children
+                    1 => calculatedChildren.Aggregate(1L, (i, x) => i * x),
+                    // Get minimum value
+                    2 => calculatedChildren.Min(),
+                    // Get max value
+                    3 => calculatedChildren.Max(),
 
-            Console.WriteLine($"Result of packet calculation: {packetValue}\n");
+                    // Greater than 
+                    5 => calculatedChildren[0] > calculatedChildren[1] ? 1 : 0,
+                    // Lesser than 
+                    6 => calculatedChildren[0] < calculatedChildren[1] ? 1 : 0,
+                    // Equal
+                    7 => calculatedChildren[0] == calculatedChildren[1] ? 1 : 0,
+
+                    // Throw
+                    _ => throw new Exception("Unknown op type")
+                };
+            }
+
+            throw new Exception("Unknown packet");
         }
+
+        Packet packet = ReadPacket(new BitReader(input));
+        long packetValue = CalculatePacket(packet);
+
+        return $"Result of packet calculation: {packetValue}";
     }
 
     private class BitReader {
@@ -149,12 +143,12 @@ static class PacketDecoder {
 
         int lengthTypeId = reader.ReadInt(1);
         List<Packet> packets = new();
-        
+
         if (lengthTypeId == 0) {
             int totalLengthInBits = reader.ReadInt(15);
             int endIndex = reader.Index + totalLengthInBits;
             while (reader.Index < endIndex) {
-                packets.Add( ReadPacket(reader) );
+                packets.Add(ReadPacket(reader));
             }
         }
         else {

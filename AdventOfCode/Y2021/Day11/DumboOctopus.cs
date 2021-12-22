@@ -1,54 +1,52 @@
 ﻿using VectorInt;
+namespace AdventOfCode.Y2021.Day11;
 
-namespace AdventOfCode.Day11; 
+public class DumboOctopus : AocSolution<Grid<int>> {
+    public override string Name => "Dumbo Octopus";
 
-static class DumboOctopus {
-    public static void Run() {
-        string[] input = File.ReadAllLines(Path.Join("Day11", "input.txt"));
-        int width = input[0].Length;
-        int height = input.Length;
+    protected override Grid<int> ProcessInput(string input) {
+        string[] lines = input.SplitLines();
+        int width = lines[0].Length;
+        int height = lines.Length;
         Grid<int> data = new(width, height);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                data[x, y] = int.Parse(input[y][x].ToString());
+                data[x, y] = int.Parse(lines[y][x].ToString());
             }
         }
 
-        {
-            Console.WriteLine("Dumbo Octopus Part 1");
-            Grid<int> part1Data = data.Clone();
-            int totalFlashes = 0;
-            for (int i = 0; i < 100; i++) {
-                totalFlashes += SimulateOctopuses(part1Data);
-            }
+        return data;
+    }
 
-            Console.WriteLine($"Total flashes: {totalFlashes}\n");
+    protected override string Part1Implementation(Grid<int> input) {
+        int totalFlashes = 0;
+        for (int i = 0; i < 100; i++) {
+            totalFlashes += SimulateOctopuses(input);
         }
-        {
-            Console.WriteLine("Dumbo Octopus Part 2");
-            Grid<int> part2Data = data.Clone();
 
-            // simulate a long time, hopefully breaks earlier than this
-            int allFlashAt = -1;
-            for (int i = 0; i < 100_000; i++) {
-                SimulateOctopuses(part2Data);
+        return $"Total flashes: {totalFlashes}";
+    }
 
-                if (part2Data.All(x => x == 0)) {
-                    allFlashAt = i + 1;
-                    break;
-                }
+    protected override string Part2Implementation(Grid<int> input) {
+        // simulate a long time, hopefully breaks earlier than this
+        int allFlashAt = -1;
+        for (int i = 0; i < 100_000; i++) {
+            SimulateOctopuses(input);
+
+            if (input.All(x => x == 0)) {
+                allFlashAt = i + 1;
+                break;
             }
-
-            Console.WriteLine($"Round of total flash: {allFlashAt}\n");
         }
-            
+
+        return $"Round of total flash: {allFlashAt}";
     }
 
     private static int SimulateOctopuses(Grid<int> data) {
         int totalFlashes = 0;
 
         HashSet<VectorInt2> flashedThisStep = new();
-        
+
         void IncrementOctopusAt(VectorInt2 pos) {
             data[pos] += 1;
             if (data[pos] == 10) {
@@ -61,7 +59,7 @@ static class DumboOctopus {
             }
         }
 
-        
+
         flashedThisStep.Clear();
         for (int y = 0; y < data.Height; y++) {
             for (int x = 0; x < data.Width; x++) {
@@ -78,10 +76,10 @@ static class DumboOctopus {
 
     private static List<VectorInt2> GetNearbyCoords(VectorInt2 pos, int width, int height) {
         List<VectorInt2> list = new();
-        int x0 = Math.Clamp(pos.X - 1, 0, width-1);
-        int x1 = Math.Clamp(pos.X + 1, 0, width-1);
-        int y0 = Math.Clamp(pos.Y - 1, 0, height-1);
-        int y1 = Math.Clamp(pos.Y + 1, 0, height-1);
+        int x0 = Math.Clamp(pos.X - 1, 0, width - 1);
+        int x1 = Math.Clamp(pos.X + 1, 0, width - 1);
+        int y0 = Math.Clamp(pos.Y - 1, 0, height - 1);
+        int y1 = Math.Clamp(pos.Y + 1, 0, height - 1);
 
         for (int x = x0; x <= x1; x++) {
             for (int y = y0; y <= y1; y++) {

@@ -1,35 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AdventOfCode.Y2021.Day07;
 
-namespace AdventOfCode.Day07; 
+public class TheTreacheryOfWhales : AocSolution<int[]> {
+    public override string Name => "The Treachery of Whales";
 
-static class TheTreacheryOfWhales {
-    public static void Run() {
-        int[] input = File.ReadAllText(Path.Join("Day07", "input.txt")).Split(',').Select(x => int.Parse(x)).ToArray();
-        {
-            Console.WriteLine("The Treachery of Whales Part 1");
+    protected override int[] ProcessInput(string input) => input.Split(',').Select(x => int.Parse(x)).ToArray();
 
-            var bestFuelUsage = GetBestFuelUsage(input, (x0, x1) => Math.Abs(x0 - x1));
+    protected override string Part1Implementation(int[] input) {
+        var bestFuelUsage = GetBestFuelUsage(input, (x0, x1) => Math.Abs(x0 - x1));
 
-            Console.WriteLine($"Min Fuel Usage: {bestFuelUsage}\n");
-        }
-        {
-            Console.WriteLine("The Treachery of Whales Part 2");
-
-            var bestFuelUsage = GetBestFuelUsage(input, (x0, x1) => {
-                    int diff = Math.Abs(x0 - x1);
-                    return (diff * (diff + 1)) / 2;
-                }
-            );
-
-            Console.WriteLine($"Min Fuel Usage: {bestFuelUsage}\n");
-        }
+        return $"Min Fuel Usage: {bestFuelUsage}";
     }
 
-    private static int GetBestFuelUsage(int[] input, Func<int,int,int> calculateFuelUsage) {
+    protected override string Part2Implementation(int[] input) {
+        var bestFuelUsage = GetBestFuelUsage(input, (x0, x1) => {
+            int diff = Math.Abs(x0 - x1);
+            return (diff * (diff + 1)) / 2;
+        });
+
+        return $"Min Fuel Usage: {bestFuelUsage}";
+    }
+
+    private static int GetBestFuelUsage(int[] input, Func<int, int, int> calculateFuelUsage) {
         int minW = input.Min();
         int maxW = input.Max();
         int bestFuelUsage = int.MaxValue;

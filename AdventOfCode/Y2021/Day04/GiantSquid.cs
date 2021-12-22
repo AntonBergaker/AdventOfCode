@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AdventOfCode.Y2021.Day04;
 
-namespace AdventOfCode.Day04;
+public class GiantSquid : AocSolution<string[]> {
+    public override string Name => "Giant Squid";
 
-static class GiantSquid {
     private const int BingoBoardSize = 5;
 
     private class BingoBoard {
@@ -82,21 +78,6 @@ static class GiantSquid {
         }
     }
 
-    public static void Run() {
-        string[] lines = File.ReadAllLines(Path.Join("Day04", "input.txt"));
-
-        {
-            Console.WriteLine("Binary Diagnostic Part 1");
-            int result = Part1(lines);
-            Console.WriteLine($"Bingo score: {result}\n");
-        }
-        {
-            Console.WriteLine("Binary Diagnostic Part 2");
-            int result = Part2(lines);
-            Console.WriteLine($"Bingo score: {result}\n");
-        }
-    }
-
     private static (int[] drawnNumbers, List<BingoBoard> boards) GetBoards(string[] lines) {
         int[] drawnNumbers = lines[0].Split(",").Select(x => int.Parse(x)).ToArray();
 
@@ -117,22 +98,22 @@ static class GiantSquid {
         return (drawnNumbers, boards);
     }
 
-    private static int Part1(string[] lines) {
+    protected override string Part1Implementation(string[] lines) {
         var (drawnNumbers, boards) = GetBoards(lines);
 
         foreach (int number in drawnNumbers) {
             foreach (BingoBoard board in boards) {
                 board.MarkNumber(number);
                 if (board.Won) {
-                    return (board.GetSumOfUnmarkedNumbers() * number);
+                    return $"Board score: {board.GetSumOfUnmarkedNumbers() * number}";
                 }
             }
         }
 
-        return -1;
+        return "You are eaten by a squid";
     }
 
-    private static int Part2(string[] lines) {
+    protected override string Part2Implementation(string[] lines) {
         var (drawnNumbers, boards) = GetBoards(lines);
 
         foreach (int number in drawnNumbers) {
@@ -141,15 +122,15 @@ static class GiantSquid {
                 board.MarkNumber(number);
                 if (board.Won) {
                     if (boards.Count == 1) {
-                        return (board.GetSumOfUnmarkedNumbers() * number);
+                        return $"Board score: {board.GetSumOfUnmarkedNumbers() * number}";
                     }
-                    
+
                     boards.Remove(board);
-                    
+
                 }
             }
         }
 
-        return -1;
+        return "You are eaten by a squid";
     }
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AdventOfCode.Y2021.Day12;
 
-namespace AdventOfCode.Day12; 
+public class PassagePathing : AocSolution<string[]> {
+    public override string Name => "Passage Pathing";
 
-static class PassagePathing {
     private class Graph {
 
         private readonly Dictionary<string, Node> nodes;
@@ -45,90 +41,83 @@ static class PassagePathing {
         }
     }
 
-    public static void Run() {
-        string[] input = File.ReadAllLines(Path.Join("Day12", "input.txt"));
+    protected override string Part1Implementation(string[] input) {
+        Graph graph = new Graph(input);
+        List<List<Node>> paths = new();
 
-        {
-            Console.WriteLine("Passage Pathing Part 1");
-            Graph graph = new Graph(input);
-            List<List<Node>> paths = new();
+        HashSet<Node> visited = new();
+        Stack<Node> path = new();
+        void Visit(Node node) {
+            if (node.Name == "end") {
+                paths.Add(path.Append(node).ToList());
+                return;
+            }
+            if (node.IsBigCave == false && visited.Contains(node)) {
+                return;
+            }
 
-            HashSet<Node> visited = new();
-            Stack<Node> path = new();
-            void Visit(Node node) {
-                if (node.Name == "end") {
-                    paths.Add( path.Append(node).ToList() );
+            visited.Add(node);
+            path.Push(node);
+            foreach (Node edge in node.Edges) {
+                Visit(edge);
+            }
+            visited.Remove(node);
+            path.Pop();
+        }
+
+        Visit(graph["start"]);
+
+        return $"Number of unique paths: {paths.Count}";
+    }
+
+    protected override string Part2Implementation(string[] input) {
+        Graph graph = new Graph(input);
+        List<List<Node>> paths = new();
+
+        HashSet<Node> visited = new();
+        Stack<Node> path = new();
+        bool spentTwoVisit = false;
+
+        void Visit(Node node) {
+            if (node.Name == "end") {
+                paths.Add(path.Reverse().Append(node).ToList());
+                return;
+            }
+
+            bool onSecondVisit = false;
+            bool previousVisitValue = spentTwoVisit;
+
+            if (node.IsBigCave == false && visited.Contains(node)) {
+                if (node.Name == "start") {
                     return;
                 }
-                if (node.IsBigCave == false && visited.Contains(node)) {
+
+                if (spentTwoVisit == false) {
+                    onSecondVisit = true;
+                    spentTwoVisit = true;
+                }
+                else {
                     return;
                 }
+            }
 
-                visited.Add(node);
-                path.Push(node);
-                foreach (Node edge in node.Edges) {
-                    Visit(edge);
-                }
+            visited.Add(node);
+            path.Push(node);
+
+            foreach (Node edge in node.Edges) {
+                Visit(edge);
+            }
+
+            spentTwoVisit = previousVisitValue;
+            if (onSecondVisit == false) {
                 visited.Remove(node);
-                path.Pop();
             }
 
-            Visit(graph["start"]);
-
-            Console.WriteLine($"Number of unique paths: {paths.Count}\n");
+            path.Pop();
         }
 
-        {
-            Console.WriteLine("Passage Pathing Part 2");
-            
-            Graph graph = new Graph(input);
-            List<List<Node>> paths = new();
+        Visit(graph["start"]);
 
-            HashSet<Node> visited = new();
-            Stack<Node> path = new();
-            bool spentTwoVisit = false;
-
-            void Visit(Node node) {
-                if (node.Name == "end") {
-                    paths.Add(path.Reverse().Append(node).ToList());
-                    return;
-                }
-
-                bool onSecondVisit = false;
-                bool previousVisitValue = spentTwoVisit;
-
-                if (node.IsBigCave == false && visited.Contains(node)) {
-                    if (node.Name == "start") {
-                        return;
-                    }
-
-                    if (spentTwoVisit == false) {
-                        onSecondVisit = true;
-                        spentTwoVisit = true;
-                    }
-                    else {
-                        return;
-                    }
-                }
-
-                visited.Add(node);
-                path.Push(node);
-
-                foreach (Node edge in node.Edges) {
-                    Visit(edge);
-                }
-
-                spentTwoVisit = previousVisitValue;
-                if (onSecondVisit == false) {
-                    visited.Remove(node);
-                }
-
-                path.Pop();
-            }
-            
-            Visit(graph["start"]);
-
-            Console.WriteLine($"Number of unique paths: {paths.Count}\n");
-        }
+        return $"Number of unique paths: {paths.Count}";
     }
 }

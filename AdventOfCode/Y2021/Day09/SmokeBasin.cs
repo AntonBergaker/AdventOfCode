@@ -1,74 +1,66 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VectorInt;
+﻿using VectorInt;
 
-namespace AdventOfCode.Day09; 
+namespace AdventOfCode.Y2021.Day09;
 
-static class SmokeBasin {
+public class SmokeBasin : AocSolution<Grid<int>> {
+    public override string Name => "Smoke Basin";
 
-    public static void Run() {
-        string[] input = File.ReadAllLines(Path.Join("Day09", "input.txt"));
-        int width = input[0].Length;
-        int height = input.Length;
+    protected override Grid<int> ProcessInput(string input) {
+        string[] lines = input.SplitLines();
+        int width = lines[0].Length;
+        int height = lines.Length;
         Grid<int> data = new(width, height);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                data[x, y] = int.Parse(input[y][x].ToString());
+                data[x, y] = int.Parse(lines[y][x].ToString());
             }
         }
+        return data;
+    }
 
-        {
-            Console.WriteLine("Smoke Basin Part 1");
+    protected override string Part1Implementation(Grid<int> data) {
+        int total = GetLowestPoints(data).Select(x => data[x] + 1).Sum();
+        return $"Sum of risk level: {total}";
+    }
 
-            int total = GetLowestPoints(data).Select(x => data[x] + 1).Sum();
+    protected override string Part2Implementation(Grid<int> data) {
+        var lowPoints = GetLowestPoints(data);
 
-            Console.WriteLine($"Sum of risk level: {total}\n");
-        }
-        {
-            Console.WriteLine("Smoke Basin Part 2");
+        // Make an array of bools to mark where we've been
+        Grid<bool> visited = new(data.Width, data.Height);
+        List<int> basinSizes = new List<int>();
 
-            var lowPoints = GetLowestPoints(data);
+        foreach (VectorInt2 lowPoint in lowPoints) {
+            int size = 0;
 
-            // Make an array of bools to mark where we've been
-            Grid<bool> visited = new(width, height);
-            List<int> basinSizes = new List<int>();
+            Stack<VectorInt2> nextPositions = new();
+            nextPositions.Push(lowPoint);
 
-            foreach (VectorInt2 lowPoint in lowPoints) {
-                int size = 0;
-
-                Stack<VectorInt2> nextPositions = new();
-                nextPositions.Push(lowPoint);
-
-                while (nextPositions.Count > 0) {
-                    VectorInt2 pos = nextPositions.Pop();
-                    var nearby = data.GetPositionNeighbors(pos);
-                    foreach (VectorInt2 near in nearby) {
-                        if (visited[near]) {
-                            continue;
-                        }
-
-                        if (data[near] == 9) {
-                            continue;
-                        }
-
-                        visited[near] = true;
-                        size++;
-                        nextPositions.Push(near);
+            while (nextPositions.Count > 0) {
+                VectorInt2 pos = nextPositions.Pop();
+                var nearby = data.GetPositionNeighbors(pos);
+                foreach (VectorInt2 near in nearby) {
+                    if (visited[near]) {
+                        continue;
                     }
-                }
 
-                basinSizes.Add(size);
+                    if (data[near] == 9) {
+                        continue;
+                    }
+
+                    visited[near] = true;
+                    size++;
+                    nextPositions.Push(near);
+                }
             }
 
-            basinSizes.Sort();
-            int productOfBasinSizes = basinSizes.Take(^3..).Aggregate(1, (i, x) => i * x);
-
-            Console.WriteLine($"Product of largest basin sizes: {productOfBasinSizes}\n");
+            basinSizes.Add(size);
         }
 
+        basinSizes.Sort();
+        int productOfBasinSizes = basinSizes.Take(^3..).Aggregate(1, (i, x) => i * x);
+
+        return $"Product of largest basin sizes: {productOfBasinSizes}";
     }
 
     private static List<VectorInt2> GetLowestPoints(Grid<int> heightMap) {
@@ -90,5 +82,4 @@ static class SmokeBasin {
 
         return points;
     }
-
 }

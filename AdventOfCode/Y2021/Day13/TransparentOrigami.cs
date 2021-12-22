@@ -1,47 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VectorInt;
+﻿using VectorInt;
 
-namespace AdventOfCode.Day13; 
+namespace AdventOfCode.Y2021.Day13;
 
-static class TransparentOrigami {
+public class TransparentOrigami : AocSolution<(string[] instructions, Grid<bool> grid)> {
+    public override string Name => "Transparent Origami";
 
-    public static void Run() {
-        string[] input = File.ReadAllLines(Path.Join("Day13", "input.txt"));
-        int dotsCount = Array.IndexOf(input, "");
-        VectorInt2[] dots = input[..dotsCount].Select(x => x.Split(',')).Select(x => new VectorInt2(int.Parse(x[0]), int.Parse(x[1]))).ToArray();
-        int width = dots.Select(x => x.X).Max()+1;
-        int height = dots.Select(x => x.Y).Max()+1;
-        string[] instructions = input[(dotsCount + 1) ..];
+    protected override (string[] instructions, Grid<bool> grid) ProcessInput(string input) {
+        string[] lines = input.SplitLines();
+        int dotsCount = Array.IndexOf(lines, "");
+        VectorInt2[] dots = lines[..dotsCount].Select(x => x.Split(',')).Select(x => new VectorInt2(int.Parse(x[0]), int.Parse(x[1]))).ToArray();
+        int width = dots.Select(x => x.X).Max() + 1;
+        int height = dots.Select(x => x.Y).Max() + 1;
+        string[] instructions = lines[(dotsCount + 1)..];
 
-        Grid<bool> defaultGrid = new(width, height);
+        Grid<bool> grid = new(width, height);
         foreach (VectorInt2 dot in dots) {
-            defaultGrid[dot] = true;
+            grid[dot] = true;
+        }
+        return (instructions, grid);
+    }
+
+    protected override string Part1Implementation((string[] instructions, Grid<bool> grid) input) {
+        var foldedGrid = Fold(input.grid, input.instructions[0]);
+
+        return $"Number of dots: {foldedGrid.Count(x => x)}\n";
+    }
+
+    protected override string Part2Implementation((string[] instructions, Grid<bool> grid) input) {
+        var foldedGrid = input.grid;
+        foreach (string instruction in input.instructions) {
+            foldedGrid = Fold(foldedGrid, instruction);
         }
 
-        {
-            Console.WriteLine("Transparent Origami Part 1");
-            var foldedGrid = Fold(defaultGrid, instructions[0]);
-            
-            Console.WriteLine($"Number of dots: {foldedGrid.Count(x => x)}\n");
-        }
-
-        {
-            Console.WriteLine("Transparent Origami Part 2");
-            var foldedGrid = defaultGrid;
-            foreach (string instruction in instructions) {
-                foldedGrid = Fold(foldedGrid, instruction);
-            }
-
-
-            Console.WriteLine("Activation code:");
-            Console.WriteLine(foldedGrid.ToGridString(x => x ? "x" : " "));
-            Console.WriteLine();
-            
-        }
+        return "Activation code\n" +
+            foldedGrid.ToGridString(x => x ? "x" : " ") + "\n";
     }
 
     private static Grid<bool> Fold(Grid<bool> grid, string instruction) {

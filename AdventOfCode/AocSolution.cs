@@ -1,28 +1,49 @@
 ﻿namespace AdventOfCode;
 
-internal abstract class AocSolution<T> {
-
+public abstract class AocSolution {
     public abstract string Name { get; }
-
-    public void RunPart1(string input) {
-        Part1(ProcessInput(input));
+    public virtual string InputPath {
+        get {
+            string namespaceName = GetType().FullName ?? throw new NullReferenceException("FullName not defined for type");
+            string[] pieces = namespaceName.Split('.');
+            return string.Join(Path.DirectorySeparatorChar, pieces[1..3]);
+        }
     }
 
-    public void RunPart2(string input) {
-        Part2(ProcessInput(input));
+    public string Part1(string input) {
+        return Part1Implementation(input);
     }
 
-    protected abstract void Part1(T input);
+    public string Part2(string input) {
+        return Part2Implementation(input);
+    }
 
-    public abstract void Part2(T input);
+    protected abstract string Part1Implementation(string input);
 
-    public virtual T ProcessInput(string input) {
+    protected abstract string Part2Implementation(string input);
+}
+
+public abstract class AocSolution<T> : AocSolution {
+
+    protected sealed override string Part1Implementation(string input) {
+        return Part1Implementation(ProcessInput(input));
+    }
+
+    protected sealed override string Part2Implementation(string input) {
+        return Part2Implementation(ProcessInput(input));
+    }
+
+    protected abstract string Part1Implementation(T input);
+
+    protected abstract string Part2Implementation(T input);
+
+    protected virtual T ProcessInput(string input) {
         if (input is T typedInput) {
             return typedInput;
         }
 
         if (typeof(T) == typeof(string[])) {
-            return (T)(object)input.Split('\n');
+            return (T)(object)input.SplitLines();
         }
 
         throw new Exception($"Type not automatically implemented for type {typeof(T)}. Please override ProcessInput to make it the correct type!");

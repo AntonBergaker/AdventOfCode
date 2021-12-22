@@ -1,52 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AdventOfCode.Y2021.Day08;
 
-namespace AdventOfCode.Day08; 
+public class SevenSegmentSearch : AocSolution<string[]> {
+    public override string Name => "Seven Segment Search";
 
-static class SevenSegmentSearch {
+    protected override string Part1Implementation(string[] input) {
+        int total = 0;
+        foreach (string line in input) {
+            int[] outputLength = line[(line.IndexOf('|') + 1)..].Split(' ').Select(x => x.Length).ToArray();
+            total += outputLength.Count(x => x is 2 or 4 or 3 or 7);
 
-    public static void Run() {
-        string[] input = File.ReadAllLines(Path.Join("Day08", "input.txt"));
-
-        {
-            Console.WriteLine("Seven Segment Search Part 1");
-            int total = 0;
-            foreach (string line in input) {
-                int[] outputLength = line[(line.IndexOf('|')+1)..].Split(' ').Select(x => x.Length).ToArray();
-                total += outputLength.Count(x => x is 2 or 4 or 3 or 7);
-
-            }
-
-            Console.WriteLine($"Number of unique values: {total}\n");
         }
 
-        {
-            int total = 0;
-            foreach (string line in input) {
-                string[] keyStrings = line[..line.IndexOf('|')].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                var keys = GetKeys(keyStrings);
-                string[] output = line[(line.IndexOf('|') + 1)..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                int lineTotal = 0;
-                foreach (string s in output) {
-                    lineTotal *= 10;
-                    lineTotal += keys[SortString(s)];
-                }
+        return $"Number of unique values: {total}";
+    }
 
-                total += lineTotal;
+    protected override string Part2Implementation(string[] input) {
+        int total = 0;
+        foreach (string line in input) {
+            string[] keyStrings = line[..line.IndexOf('|')].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var keys = GetKeys(keyStrings);
+            string[] output = line[(line.IndexOf('|') + 1)..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            int lineTotal = 0;
+            foreach (string s in output) {
+                lineTotal *= 10;
+                lineTotal += keys[SortString(s)];
             }
 
-            Console.WriteLine("Seven Segment Search Part 2");
-
-            Console.WriteLine($"Sum of all values: {total}\n");
+            total += lineTotal;
         }
+
+        return $"Sum of all values: {total}";
     }
 
     private static string SortString(string str) {
         return new string(str.OrderBy(c => c).ToArray());
-    } 
+    }
 
     private static bool ContainsSegments(string segment, string subsegments) {
         return subsegments.All(x => segment.Contains(x));
@@ -81,7 +69,7 @@ static class SevenSegmentSearch {
 
         string gSegment = GetDifference(foundKeys[8], foundKeys[4] + eSegment + aSegment);
         // Of the remaining ones, only 0 contains ACEFG
-        FindKey(0, unfoundKeyList.First(x => ContainsSegments( x, SortString( foundKeys[7] + eSegment + gSegment))));
+        FindKey(0, unfoundKeyList.First(x => ContainsSegments(x, SortString(foundKeys[7] + eSegment + gSegment))));
         string dSegment = GetDifference(foundKeys[8], foundKeys[0]);
         string bSegment = GetDifference(foundKeys[4], foundKeys[1] + dSegment);
 

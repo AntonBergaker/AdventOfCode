@@ -1,53 +1,43 @@
 ﻿using VectorInt;
 
-namespace AdventOfCode.Day05; 
+namespace AdventOfCode.Y2021.Day05;
 
-static class HydrothermalVenture {
+public class HydrothermalVenture : AocSolution<List<HydrothermalVenture.Line>> {
+    public override string Name => "Hydrothermal Venture";
 
-    private record Line(VectorInt2 P0, VectorInt2 P1) {
+    public record Line(VectorInt2 P0, VectorInt2 P1) {
         public VectorInt2 Length => P1 - P0;
-        
+
         public int Magnitude => Math.Max(Math.Abs(Length.X), Math.Abs(Length.Y));
 
         public VectorInt2 Direction => Length / new VectorInt2(Magnitude);
     }
 
-
-    private static List<Line> GetAllLines(string[] input) {
-        return input.Select(x => {
-            int[] numbers = x.Split(new [] {",", "->"}, 
+    protected override List<Line> ProcessInput(string input) {
+        return input.SplitLines().Select(x => {
+            int[] numbers = x.Split(new[] { ",", "->" },
                     StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                 .Select(y => int.Parse(y)).ToArray();
             return new Line(new(numbers[0], numbers[1]), new(numbers[2], numbers[3]));
         }).ToList();
     }
-
     private static int GetMaxSize(List<Line> lines) {
-        return lines.SelectMany(x => new[] {x.P0.X, x.P0.Y, x.P1.X, x.P1.Y} ).Max()+1;
+        return lines.SelectMany(x => new[] { x.P0.X, x.P0.Y, x.P1.X, x.P1.Y }).Max() + 1;
     }
 
+    protected override string Part1Implementation(List<Line> lines) {
+        int result = CalculateDangerAreas(lines, x => x.Direction.IsUnit);
+        return $"Danger points: {result}";
+    }
 
-    public static void Run() {
-        string[] input = File.ReadAllLines(Path.Join("Day05", "input.txt"));
-        List<Line> lines = GetAllLines(input);
+    protected override string Part2Implementation(List<Line> lines) {
+        int result = CalculateDangerAreas(lines, _ => true);
+        return $"Danger points: {result}";
+    }
+
+    private static int CalculateDangerAreas(List<Line> lines, Func<Line, bool> shouldKeepLineFunc) {
         int gridSize = GetMaxSize(lines);
-
-        {
-            Console.WriteLine("Hydrothermal Venture Part 1");
-            int result = CalculateDangerAreas(lines, gridSize, x => x.Direction.IsUnit);
-
-            Console.WriteLine($"Danger points: {result}\n");
-        }
-        {
-            Console.WriteLine("Hydrothermal Venture Part 2");
-            int result = CalculateDangerAreas(lines, gridSize, _ => true);
-            Console.WriteLine($"Danger points: {result}\n");
-        }
-
-    }
-
-    private static int CalculateDangerAreas(List<Line> lines, int gridSize, Func<Line, bool> shouldKeepLineFunc) {
-        Grid<int> grid = new (gridSize, gridSize);
+        Grid<int> grid = new(gridSize, gridSize);
 
         foreach (Line line in lines) {
             if (shouldKeepLineFunc(line) == false) {
@@ -66,5 +56,4 @@ static class HydrothermalVenture {
 
         return grid.Count(number => number >= 2);
     }
-
 }
