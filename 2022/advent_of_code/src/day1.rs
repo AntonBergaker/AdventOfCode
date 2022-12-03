@@ -28,5 +28,6 @@ pub fn day1() {
         _ => 0,
     };
 
-    println!("{}", top_three);
+    println!("Top one: {}", calories.last().expect(""));
+    println!("Top three: {}", top_three);
 }
