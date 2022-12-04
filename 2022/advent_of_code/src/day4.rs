@@ -1,9 +1,6 @@
-use std::{fs, ops::Range};
+use std::{ops::Range};
 
-pub fn day4() {
-    let input = fs::read_to_string("input/day4.txt").expect("Failed to load input.");
-    let input_lines: Vec<&str> = input.lines().collect();
-
+pub fn day4(input_lines: Vec<&str>) {
     let mut total_contains_other = 0;
     let mut total_overlap = 0;
 

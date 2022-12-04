@@ -1,8 +1,4 @@
-use std::fs;
-
-pub fn day2() {
-    let input = fs::read_to_string("input/day2.txt").expect("Failed to load input.");
-    let input_lines: Vec<&str> = input.lines().collect();
+pub fn day2(input_lines: Vec<&str>) {
 
     {
         let mut score = 0;

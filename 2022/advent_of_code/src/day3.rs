@@ -1,9 +1,6 @@
-use std::{fs, collections::HashSet};
+use std::{collections::HashSet};
 
-pub fn day3() {
-    let input = fs::read_to_string("input/day3.txt").expect("Failed to load input.");
-    let input_lines: Vec<&str> = input.lines().collect();
-
+pub fn day3(input_lines: Vec<&str>) {
     part1(&input_lines);
     part2(&input_lines);
 }

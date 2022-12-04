@@ -1,10 +1,4 @@
-use std::fs;
-
-
-pub fn day1() {
-    let input = fs::read_to_string("input/day1.txt").expect("Failed to load input.");
-    let input_lines = input.split("\n");
-
+pub fn day1(input_lines: Vec<&str>) {
     let mut calories: Vec<i32> = Vec::new();
 
     {
