@@ -4,15 +4,17 @@ mod day1;
 mod day2;
 mod day3;
 mod day4;
+mod day5;
 
 fn main() {
     // Necessary to cast to, when function expects a Str instead of a vector
-    //type StrInput = fn(&str);
+    type StrInput = fn(&str);
 
     evaluate_day(day1::day1, 1);
     evaluate_day(day2::day2, 2);
     evaluate_day(day3::day3, 3);
     evaluate_day(day4::day4, 4);
+    evaluate_day(day5::day5, 5);
 }
 
 pub trait DayInput {
