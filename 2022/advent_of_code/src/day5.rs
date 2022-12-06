@@ -1,11 +1,11 @@
 use std::{iter};
 
 pub fn day5(input_lines: Vec<&str>) {
-    implementation(&input_lines, part1_crane);
-    implementation(&input_lines, part2_crane);
+    run_crane_with_function(&input_lines, part1_crane);
+    run_crane_with_function(&input_lines, part2_crane);
 }
 
-fn implementation(input_lines: &Vec<&str>, crane_function: fn(&mut Vec<Vec<char>>, usize, usize, usize)) {
+fn run_crane_with_function(input_lines: &Vec<&str>, crane_function: fn(&mut Vec<Vec<char>>, usize, usize, usize)) {
     const BOX_INPUT_WIDTH: usize = 4;
 
     let stack_count = (input_lines[0].chars().count() + 1)/BOX_INPUT_WIDTH;
@@ -72,6 +72,6 @@ fn part2_crane(stacks: &mut Vec<Vec<char>>, count: usize, from: usize, to: usize
 
     // Put crane inventory down
     while crane_inventory.is_empty() == false {
-        stacks[to].push(crane_inventory.pop().expect("Didn't have a box")); 
+        stacks[to].push(crane_inventory.pop().expect("Crane inventory empty")); 
     }
 }

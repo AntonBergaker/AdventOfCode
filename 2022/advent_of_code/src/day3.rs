@@ -70,7 +70,7 @@ fn string_to_char_vec(input: &str) -> Vec<char> {
 
 fn string_to_set(input: &str) -> HashSet<char> {
     let input_vec: Vec<char> = string_to_char_vec(input);
-    return HashSet::from_iter(input_vec.iter().cloned());
+    return input_vec.into_iter().collect();
 }
 
 fn get_char_priority(char: char) -> i32 {
