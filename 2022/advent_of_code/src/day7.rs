@@ -1,5 +1,8 @@
 use std::{collections::HashMap, slice::Iter};
 
+
+// Beyond this point lies madness. A madmans attempt to solve memory ownership with a stack based solution. The lack of recursive closures made it really
+// messy and needing a lot of mutable parameters passed around. I apologize to any readers.
 pub fn day7(input_lines: Vec<&str>) {
     let root_name = String::from("root");
     let mut root = Folder::new(&root_name);
@@ -104,12 +107,10 @@ impl Folder {
     }
 
     pub fn add_file(&mut self, file: File) {
-        println!("Made file {}", &file.name);
         self.files.insert(file.name.clone(), file);
     }
 
     pub fn add_folder(&mut self, folder: Folder) {
-        println!("Made folder {}", &folder.name);
         self.folders.insert(folder.name.clone(), folder);
     }
 
