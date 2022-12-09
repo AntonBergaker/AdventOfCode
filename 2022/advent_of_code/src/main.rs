@@ -1,26 +1,21 @@
 use std::{fs};
 
-mod day1;
-mod day2;
-mod day3;
-mod day4;
-mod day5;
-mod day6;
-mod day7;
-mod day8;
+mod days;
+pub mod data_types;
 
 fn main() {
     // Necessary to cast to, when function expects a Str instead of a vector
     type StrInput = fn(&str);
 
-    evaluate_day(day1::day1, 1);
-    evaluate_day(day2::day2, 2);
-    evaluate_day(day3::day3, 3);
-    evaluate_day(day4::day4, 4);
-    evaluate_day(day5::day5, 5);
-    evaluate_day(day6::day6 as StrInput, 6);
-    evaluate_day(day7::day7, 7);
-    evaluate_day(day8::day8, 8);
+    evaluate_day(days::day1::day1, 1);
+    evaluate_day(days::day2::day2, 2);
+    evaluate_day(days::day3::day3, 3);
+    evaluate_day(days::day4::day4, 4);
+    evaluate_day(days::day5::day5, 5);
+    evaluate_day(days::day6::day6 as StrInput, 6);
+    evaluate_day(days::day7::day7, 7);
+    evaluate_day(days::day8::day8, 8);
+    evaluate_day(days::day9::day9, 9);
 }
 
 pub trait DayInput {

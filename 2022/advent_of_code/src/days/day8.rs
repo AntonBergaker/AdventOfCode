@@ -1,4 +1,4 @@
-use std::ops;
+use crate::data_types::point::Point;
 
 pub fn day8(input_lines: Vec<&str>) {
     let mut trees: Vec<Vec<Tree>> = Vec::new();
@@ -114,58 +114,4 @@ fn get_scenic_score_in_direction(trees: &Vec<Vec<Tree>>, width: usize, height: u
 struct Tree {
     height: i32,
     visible: bool,
-}
-
-#[derive(Debug, Copy, Clone, PartialEq)]
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-impl ops::Add for Point {
-    type Output = Self;
-
-    fn add(self, rhs: Point) -> Self {
-        return Self {
-            x: self.x + rhs.x,
-            y: self.y + rhs.y
-        }
-    }
-}
-
-impl ops::AddAssign for Point {
-    fn add_assign(&mut self, rhs: Self) {
-        self.x += rhs.x;
-        self.y += rhs.y;
-    }
-}
-
-impl ops::Sub for Point {
-    type Output = Self;
-
-    fn sub(self, rhs: Self) -> Self {
-        return Self {
-            x: self.x - rhs.x,
-            y: self.y - rhs.y
-        }
-    }
-}
-
-impl ops::SubAssign for Point {
-    fn sub_assign(&mut self, rhs: Self) {
-        *self = Self {
-            x: self.x + rhs.x,
-            y: self.y + rhs.y,
-        };
-    }
-}
-
-
-impl Point {
-    pub fn new(x: i32, y: i32) -> Self {
-        Self {
-            x: x,
-            y: y
-        }
-    }
 }
