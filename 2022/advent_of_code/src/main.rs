@@ -16,6 +16,7 @@ fn main() {
     evaluate_day(days::day7::day7, 7);
     evaluate_day(days::day8::day8, 8);
     evaluate_day(days::day9::day9, 9);
+    evaluate_day(days::day10::day10, 10);
 }
 
 pub trait DayInput {
