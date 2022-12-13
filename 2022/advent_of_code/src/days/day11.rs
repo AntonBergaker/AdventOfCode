@@ -1,5 +1,3 @@
-use std::cmp::Ordering;
-
 pub fn day11(input: &str) {
     part1(input);
     part2(input);

@@ -65,15 +65,6 @@ fn part2(input_lines: &Vec<&str>) {
         }
     }
 
-    let mut output = String::new();
-    for y in 0..grid.height() {
-        for x in 0..grid.width() {
-            output.push(if grid[(x, y)] {'#'} else {' '});
-        }
-
-        output.push('\n');
-    }
-
     println!("Output drawn to the CRT: ");
-    println!("{}", output);
+    println!("{}", grid.to_string(|x| if x {'#'} else {' '}));
 }
