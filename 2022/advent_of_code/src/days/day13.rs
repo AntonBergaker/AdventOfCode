@@ -11,7 +11,7 @@ fn part1(input_lines: &Vec<&str>) {
         let a = parse(input_lines[i+0]);
         let b = parse(input_lines[i+1]);
 
-        let result = compare(&a, &b);
+        let result = a.cmp(&b);
         if result == Ordering::Less {
             wrong_pairs += 1 + i/3;
         }
@@ -31,49 +31,12 @@ fn part2(input_lines: &Vec<&str>) {
     let divider6 = divider_creator(6);
     values.push(divider_creator(6));
     
-    values.sort_by(compare);
+    values.sort();
 
-    let divider2_index = values.iter().position(|r| equals(&r, &divider2)).unwrap() + 1;
-    let divider6_index = values.iter().position(|r| equals(&r, &divider6)).unwrap() + 1;
+    let divider2_index = values.iter().position(|x| x == &divider2).unwrap() + 1;
+    let divider6_index = values.iter().position(|x| x == &divider6).unwrap() + 1;
 
     println!("Decoder key: {}", divider2_index * divider6_index);
-}
-
-fn compare(rhs: &Value, lhs: &Value) -> Ordering {
-    return match (rhs, lhs) {
-        (Value::Integer(a), Value::Integer(b)) => a.cmp(b),
-        (Value::List(a), Value::List(b)) => {
-            let min = usize::min(a.len(), b.len());
-            for i in 0..min {
-                match compare(&a[i], &b[i]) {
-                    Ordering::Greater => return Ordering::Greater,
-                    Ordering::Less => return Ordering::Less,
-                    Ordering::Equal => (), // keep looping
-                }
-            }
-            a.len().cmp(&b.len())
-        }
-        (Value::Integer(a), Value::List(_)) => compare(&Value::List(vec![Value::Integer(*a)]), lhs),
-        (Value::List(_), Value::Integer(b)) => compare(rhs, &Value::List(vec![Value::Integer(*b)])),
-    };
-}
-
-fn equals(rhs: &Value, lhs: &Value) -> bool {
-    match (rhs, lhs) {
-        (Value::Integer(a), Value::Integer(b)) => a == b,
-        (Value::List(a), Value::List(b)) => {
-            if a.len() != b.len() {
-                return false;
-            }
-            for i in 0..a.len() {
-                if equals(&a[i], &b[i]) == false {
-                    return false;
-                }
-            }
-            return true;
-        }
-        _ => false,
-    }
 }
 
 fn parse(input: &str) -> Value {
@@ -142,4 +105,39 @@ enum Token {
 enum Value {
     List(Vec<Value>),
     Integer(i32),
+}
+
+impl PartialEq for Value {
+    fn eq(&self, other: &Self) -> bool {
+        return self.cmp(other) == Ordering::Equal;
+    }
+}
+
+impl Eq for Value {}
+
+impl PartialOrd for Value {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for Value {
+    fn cmp(&self, other: &Self) -> Ordering {
+        return match (&self, other) {
+            (Value::Integer(a), Value::Integer(b)) => a.cmp(b),
+            (Value::List(a), Value::List(b)) => {
+                let min = usize::min(a.len(), b.len());
+                for i in 0..min {
+                    match (&a[i]).cmp(&b[i]) {
+                        Ordering::Greater => return Ordering::Greater,
+                        Ordering::Less => return Ordering::Less,
+                        Ordering::Equal => (), // keep looping
+                    }
+                }
+                a.len().cmp(&b.len())
+            }
+            (Value::Integer(a), Value::List(_)) => (&Value::List(vec![Value::Integer(*a)])).cmp(other),
+            (Value::List(_), Value::Integer(b)) => self.cmp(&Value::List(vec![Value::Integer(*b)])),
+        };
+    }
 }
