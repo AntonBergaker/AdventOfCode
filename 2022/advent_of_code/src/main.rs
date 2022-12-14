@@ -1,4 +1,6 @@
-use std::{fs};
+use std::{fs,time::Instant};
+
+use colored::Colorize;
 
 mod days;
 pub mod data_types;
@@ -20,6 +22,7 @@ fn main() {
     evaluate_day(days::day11::day11 as StrInput, 11);
     evaluate_day(days::day12::day12 as StrInput, 12);
     evaluate_day(days::day13::day13, 13);
+    evaluate_day(days::day14::day14, 14);
 }
 
 pub trait DayInput {
@@ -43,11 +46,17 @@ impl DayInput for fn(&str) {
 
 
 fn evaluate_day<T: DayInput>(function: T, day: i32) {
-    println!("Day {}:", day);
+    println!("{}", format!("Day {}:", day).blue().bold());
+    println!();
 
     let input_path = format!("input/day{}.txt", day);
     let input = fs::read_to_string(input_path).expect(&format!("Failed to load input for day {}", day));
     
+    let start = Instant::now();
+
     function.evaluate(&input);
+
+    println!();
+    println!("{}", format!("Took: {} ms", start.elapsed().as_millis()).bright_black().italic());
     println!();
 }
