@@ -34,7 +34,7 @@ fn parse_grid(width: usize, height: usize, point_list: &Vec<Vec<Point>>) -> Grid
             let diff = target-current;
             let sign = Point::new(diff.x.signum(), diff.y.signum());
 
-            for _ in 0..=i32::max(diff.x.abs(), diff.y.abs()) {
+            for _ in 0..=i64::max(diff.x.abs(), diff.y.abs()) {
                 grid[current] = Tile::Wall;
                 current += sign;
             }

@@ -72,14 +72,14 @@ impl<T> Grid<T> {
     }
 
     pub fn point_is_inside(&self, point: Point) -> bool {
-        return point.x >= 0 && point.y >= 0 && point.x < self.width as i32 && point.y < self.height as i32;
+        return point.x >= 0 && point.y >= 0 && point.x < self.width as i64 && point.y < self.height as i64;
     }
 }
 
 impl<T: PartialEq> Grid<T> {
     pub fn position_of(&self, value: T) -> Point {
         let index: usize = self.data.iter().position(|x| *x == value).unwrap();
-        return Point::new((index % self.width) as i32, (index / self.width) as i32);
+        return Point::new((index % self.width) as i64, (index / self.width) as i64);
     }
 }
 

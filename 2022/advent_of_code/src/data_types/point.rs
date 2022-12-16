@@ -2,8 +2,8 @@ use std::ops;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 pub struct Point {
-    pub x: i32,
-    pub y: i32,
+    pub x: i64,
+    pub y: i64,
 }
 
 impl ops::Add for Point {
@@ -46,7 +46,7 @@ impl ops::SubAssign for Point {
 
 
 impl Point {
-    pub fn new(x: i32, y: i32) -> Self {
+    pub fn new(x: i64, y: i64) -> Self {
         Self {
             x: x,
             y: y

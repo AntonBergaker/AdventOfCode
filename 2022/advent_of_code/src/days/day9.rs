@@ -23,11 +23,11 @@ fn simulate_rope_tail_visits(input_lines: &Vec<&str>, rope_length: usize) -> usi
                 let head = rope[i-1];
                 let tail = rope[i];
                 // If head and tail are seperated more than 2
-                if i32::abs(tail.x - head.x) > 1 || i32::abs(tail.y - head.y) > 1 {
+                if i64::abs(tail.x - head.x) > 1 || i64::abs(tail.y - head.y) > 1 {
                     // Move 1 point in one or both direction
                     let diff = Point::new(
-                        i32::clamp(head.x - tail.x, -1, 1),
-                        i32::clamp(head.y - tail.y, -1, 1),
+                        i64::clamp(head.x - tail.x, -1, 1),
+                        i64::clamp(head.y - tail.y, -1, 1),
                     );
                     rope[i] += diff;
                 }
