@@ -8,7 +8,7 @@ pub mod data_types;
 fn main() {
     // Necessary to cast to, when function expects a Str instead of a vector
     type StrInput = fn(&str);
-
+    /*
     evaluate_day(days::day1::day1, 1);
     evaluate_day(days::day2::day2, 2);
     evaluate_day(days::day3::day3, 3);
@@ -23,7 +23,8 @@ fn main() {
     evaluate_day(days::day12::day12 as StrInput, 12);
     evaluate_day(days::day13::day13, 13);
     evaluate_day(days::day14::day14, 14);
-    evaluate_day(days::day15::day15, 15);
+    evaluate_day(days::day15::day15, 15); */
+    evaluate_day(days::day16::day16, 16);
 }
 
 pub trait DayInput {
