@@ -17,7 +17,7 @@ let day1 (input: string[]) =
     
     printfn "Sum of digits: %d" (sumFirstAndLastNumbers input)
    
-    let numbers = dict[
+    let numbers = dict [
         "one", 1;
         "two", 2;
         "three", 3;
@@ -50,22 +50,21 @@ let day1 (input: string[]) =
 
 
 (*
-This is a monument to our sins. I wanted to solve it in a very #F way, but as you can see I discovered the wonderous
+This is a monument to all my sins. I wanted to solve it in a very F# way, but as you can see I discovered the wonderous
 edge case where the tail of a number actually was important to the rest of the solution. The solution below is
 very lovely, in the way an ugly baby is. Unfortunately for my own sanity it's been aborted.
 
-    let rec replaceLineWithDigits (line: char list) =
-        match line with
-        | 'o' :: 'n' :: 'e' :: tail -> '1' :: replaceLineWithDigits ('n' :: 'e' :: tail)
-        | 't' :: 'w' :: 'o' :: tail -> '2' :: replaceLineWithDigits ('w' :: 'o' :: tail)
-        | 't' :: 'h' :: 'r' :: 'e' :: 'e' :: tail -> '3' :: replaceLineWithDigits ('h' :: 'r' :: 'e' :: 'e' :: tail)
-        | 'f' :: 'o' :: 'u' :: 'r' :: tail -> '4' :: replaceLineWithDigits ('o' :: 'u' :: 'r' :: tail)
-        | 'f' :: 'i' :: 'v' :: 'e' :: tail -> '5' :: replaceLineWithDigits ('i' :: 'v' :: 'e' :: tail)
-        | 's' :: 'i' :: 'x' ::  tail -> '6' :: replaceLineWithDigits ('i' :: 'x' :: tail)
-        | 's' :: 'e' :: 'v' :: 'e' :: 'n' :: tail -> '7' :: replaceLineWithDigits ('e' :: 'v' :: 'e' :: 'n' :: tail)
-        | 'e' :: 'i' :: 'g' :: 'h' :: 't' :: tail -> '8' :: replaceLineWithDigits ('i' :: 'g' :: 'h' :: 't' :: tail)
-        | 'n' :: 'i' :: 'n' :: 'e' :: tail -> '9' :: replaceLineWithDigits ('i' :: 'n' :: 'e' :: tail)
-        | head :: tail -> head :: replaceLineWithDigits tail
-        | [] -> []
-
+let rec replaceLineWithDigits (line: char list) =
+    match line with
+    | 'o' :: 'n' :: 'e' :: tail -> '1' :: replaceLineWithDigits ('n' :: 'e' :: tail)
+    | 't' :: 'w' :: 'o' :: tail -> '2' :: replaceLineWithDigits ('w' :: 'o' :: tail)
+    | 't' :: 'h' :: 'r' :: 'e' :: 'e' :: tail -> '3' :: replaceLineWithDigits ('h' :: 'r' :: 'e' :: 'e' :: tail)
+    | 'f' :: 'o' :: 'u' :: 'r' :: tail -> '4' :: replaceLineWithDigits ('o' :: 'u' :: 'r' :: tail)
+    | 'f' :: 'i' :: 'v' :: 'e' :: tail -> '5' :: replaceLineWithDigits ('i' :: 'v' :: 'e' :: tail)
+    | 's' :: 'i' :: 'x' ::  tail -> '6' :: replaceLineWithDigits ('i' :: 'x' :: tail)
+    | 's' :: 'e' :: 'v' :: 'e' :: 'n' :: tail -> '7' :: replaceLineWithDigits ('e' :: 'v' :: 'e' :: 'n' :: tail)
+    | 'e' :: 'i' :: 'g' :: 'h' :: 't' :: tail -> '8' :: replaceLineWithDigits ('i' :: 'g' :: 'h' :: 't' :: tail)
+    | 'n' :: 'i' :: 'n' :: 'e' :: tail -> '9' :: replaceLineWithDigits ('i' :: 'n' :: 'e' :: tail)
+    | head :: tail -> head :: replaceLineWithDigits tail
+    | [] -> []
 *)
