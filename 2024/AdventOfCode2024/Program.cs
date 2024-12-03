@@ -7,7 +7,7 @@ bool useTestInput = false;
 
 RunDay<Day01>(01, useTestInput);
 RunDay<Day02>(02, useTestInput);
-
+RunDay<Day03>(03, useTestInput);
 
 static void RunDay<TDay>(int dayNumber, bool useTestInput) where TDay: IDay, new() {
     var day = new TDay();
