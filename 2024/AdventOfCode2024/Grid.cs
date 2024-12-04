@@ -94,4 +94,7 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
     public bool IsValidCoord(int x, int y) {
         return x >= 0 && y >= 0 && x < Width && y < Height;
     }
+    public bool IsValidCoord(VectorInt2 position) {
+        return IsValidCoord(position.X, position.Y);
+    }
 }
