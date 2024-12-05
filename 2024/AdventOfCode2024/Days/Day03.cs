@@ -1,4 +1,4 @@
-﻿
+﻿using InterpolatedParsing;
 using Pastel;
 using System.Drawing;
 using System.Text.RegularExpressions;
@@ -43,7 +43,7 @@ public class Day03 : DayTextBase<string> {
 
     private static int EvaluateMultiplication(string text) {
         int lhs = 0, rhs = 0;
-        InterpolatedParsing.InterpolatedParser.Parse(text, $"mul({lhs},{rhs})");
+        InterpolatedParser.Parse(text, $"mul({lhs},{rhs})");
         var sum = lhs * rhs;
         return sum;
     }

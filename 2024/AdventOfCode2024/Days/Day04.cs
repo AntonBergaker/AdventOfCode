@@ -53,14 +53,12 @@ public class Day04 : DayLineBase<Grid<char>> {
                     continue;
                 }
                 var pos = new VectorInt2(x, y);
-                var hits = 0;
-                foreach (var direction in directions) {
-                    if (GridMatchesLetters(grid, pos - direction, direction, "MAS") ||
-                        GridMatchesLetters(grid, pos - direction, direction, "SAM")) {
-                        hits++;
-                    }
-                }
-                if (hits >= 2) {
+
+                // Check X shape by checking both directions
+                if (directions.All(x =>
+                    GridMatchesLetters(grid, pos - x, x, "MAS") ||
+                    GridMatchesLetters(grid, pos - x, x, "SAM") // I'd love to reverse the angle instead of the letters, but this vector library doesn't have a unary negate.
+                )) {
                     total++;
                 }
             }

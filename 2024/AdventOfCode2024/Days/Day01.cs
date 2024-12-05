@@ -11,7 +11,7 @@ public class Day01 : DayLineBase<Lists> {
 
         foreach (var line in input) {
             int leftNumber = 0, rightNumber = 0;
-            InterpolatedParsing.InterpolatedParser.Parse(line, $"{leftNumber}   {rightNumber}");
+            InterpolatedParser.Parse(line, $"{leftNumber}   {rightNumber}");
             leftList.Add(leftNumber);
             rightList.Add(rightNumber);
         }
