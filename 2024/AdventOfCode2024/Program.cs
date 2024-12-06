@@ -8,6 +8,7 @@ RunDay<Day02>(02);
 RunDay<Day03>(03);
 RunDay<Day04>(04);
 RunDay<Day05>(05);
+RunDay<Day06>(06);
 
 static void RunDay<TDay>(int dayNumber) where TDay: IDay, new() {
     var day = new TDay();
@@ -30,7 +31,13 @@ static void RunDay<TDay>(int dayNumber) where TDay: IDay, new() {
 
     void RunPart(string part, string suffix, Func<string> function) {
         var stopwatch = Stopwatch.StartNew();
-        var result = function();
+        string result;
+        try {
+            result = function();
+        } catch (NotImplementedException) {
+            return;
+        }
+        
         stopwatch.Stop();
 
         Console.WriteLine(

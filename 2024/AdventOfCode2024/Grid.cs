@@ -62,18 +62,30 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
         }
     }
 
+    public IEnumerable<VectorInt2> GetPositions() {
+        for (int y = 0; y < Height; y++) {
+            for (int x = 0; x < Width; x++) {
+                yield return new(x, y);
+            }
+        }
+    }
+
     public string ToGridString() {
-        return ToGridString(x => x?.ToString() ?? "null");
+        return ToGridString((x, _) => x?.ToString() ?? "null");
     }
 
     public string ToGridString(Func<T, string> toStringFunc) {
+        return ToGridString((x, _) => toStringFunc(x));
+    }
+
+    public string ToGridString(Func<T, VectorInt2, string> toStringFunc) { 
         var sb = new StringBuilder();
         for (int y = 0; y < Height; y++) {
             if (y > 0) {
                 sb.Append('\n');
             }
             for (int x = 0; x < Width; x++) {
-                sb.Append(toStringFunc(_data[x, y]));
+                sb.Append(toStringFunc(_data[x, y], new(x, y)));
             }
         }
 
