@@ -48,13 +48,16 @@ public class Day06 : DayLineBase<Day06.InputData> {
     public override string Part2(InputData input) {
         var placesToBlock = GetGuardWalkingPositions(input)[1..];
         var total = 0;
+        var cells = input.Cells.Clone(); // Clone to not taint input. For uhm multithreading safety or something.
+
         foreach (var placeToBlock in placesToBlock) {
-            var cells = input.Cells.Clone(); // We could not clone it, and just put the empty space back... but w/e
             cells[placeToBlock] = Cell.Wall;
             
             if (CanExitMaze(new(input.StartPosition, cells)) == false) {
                 total++;
             }
+
+            cells[placeToBlock] = Cell.Empty; // Return to before
         }
 
         return $"Number of positions where we can create loops: {total.ToString().Pastel(Color.Yellow)}";
@@ -74,7 +77,7 @@ public class Day06 : DayLineBase<Day06.InputData> {
     }
 
     private VectorInt2[] GetGuardWalkingPositions(InputData input) {
-        return IterateMaze(input).Select(x => x.Position).ToHashSet().ToArray();
+        return IterateMaze(input).Select(x => x.Position).Distinct().ToArray();
     }
 
     private static IEnumerable<PositionDirection> IterateMaze(InputData input) {
