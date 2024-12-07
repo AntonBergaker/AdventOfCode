@@ -27,8 +27,8 @@ public class Day07 : DayLineBase<Day07.OperatorLine[]> {
 
         long total = 0;
         foreach (var line in input) {
-            if (TestOperationsOnLine(line, operations, out var value)) {
-                total += value;
+            if (TestOperationsOnLine(line, operations)) {
+                total += line.Total;
             }
         }
 
@@ -45,32 +45,36 @@ public class Day07 : DayLineBase<Day07.OperatorLine[]> {
 
         long total = 0;
         foreach (var line in input) {
-            if (TestOperationsOnLine(line, operations, out var value)) {
-                total += value;
+            if (TestOperationsOnLine(line, operations)) {
+                total += line.Total;
             }
         }
 
         return $"Sum of lines that can be correctly assembled: {total.ToString().Pastel(Color.Yellow)}";
     }
-    private static bool TestOperationsOnLine(OperatorLine line, BinaryOperation[] operations, out long value) {
+    private static bool TestOperationsOnLine(OperatorLine line, BinaryOperation[] operations) {
         int operatorCount = line.Numbers.Length - 1;
-        var iterationCount = (int)Math.Pow(operations.Length, operatorCount);
 
-        for (int iteration = 0; iteration < iterationCount; iteration++) {
-            long testValue = line.Numbers[0];
-            for (int i = 0; i < operatorCount; i++) {
-                // Get the operator to use at this index.
-                int operatorIndex = (iteration / (int)Math.Pow(operations.Length, i)) % operations.Length;
-                testValue = operations[operatorIndex](testValue, line.Numbers[i + 1]);
-            }
+        return TestRemainingOperations(1, line.Numbers[0]); ;
 
-            if (testValue == line.Total) {
-                value = line.Total;
-                return true;
+        bool TestRemainingOperations(int index, long total) {
+            if (index > operatorCount) {
+                return total == line.Total;
             }
+            var number = line.Numbers[index];
+
+            for (int i = 0; i < operations.Length; i++) {
+                var newTotal = operations[i](total, number);
+
+                if (newTotal > line.Total) {
+                    continue;
+                }
+
+                if (TestRemainingOperations(index + 1, newTotal)) {
+                    return true;
+                }
+            }
+            return false;
         }
-
-        value = default;
-        return false;
     }
 }
