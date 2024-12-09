@@ -11,6 +11,7 @@ RunDay<Day05>(05);
 //RunDay<Day06>(06);
 RunDay<Day07>(07);
 RunDay<Day08>(08);
+RunDay<Day09>(09);
 
 static void RunDay<TDay>(int dayNumber) where TDay: IDay, new() {
     var day = new TDay();
@@ -18,20 +19,22 @@ static void RunDay<TDay>(int dayNumber) where TDay: IDay, new() {
     Console.WriteLine($"{" ==== ".Pastel(Color.Gray)}{"Day ".Pastel(Color.LimeGreen)}{dayNumber.ToString().Pastel(Color.Red)}{" ==== ".Pastel(Color.Gray)}");
 
 #if DEBUG
-    RunInput("TestInput", "(test) ");
+    RunInput("TestInput", $"{"(".Pastel(Color.Gray)}{"test".Pastel(Color.DeepPink)}{") "}".Pastel(Color.Gray));
     Console.WriteLine();
 #endif
     RunInput("Input", "");
 
     void RunInput(string folderPath, string suffix) {
+        var stopwatch = Stopwatch.StartNew();
         var import = day.Import(File.ReadAllText($"{folderPath}/day{dayNumber:00}.txt"));
+        stopwatch.Stop();
 
-        RunPart("1", suffix, () => day.Part1(import));
+        RunPart("1", suffix, stopwatch.ElapsedTicks, () => day.Part1(import));
         Console.WriteLine();
-        RunPart("2", suffix, () => day.Part2(import));
+        RunPart("2", suffix, stopwatch.ElapsedTicks, () => day.Part2(import));
     }
 
-    void RunPart(string part, string suffix, Func<string> function) {
+    void RunPart(string part, string suffix, long importTime, Func<string> function) {
         var stopwatch = Stopwatch.StartNew();
         string result;
         try {
@@ -42,9 +45,11 @@ static void RunDay<TDay>(int dayNumber) where TDay: IDay, new() {
         
         stopwatch.Stop();
 
+        var time = (stopwatch.ElapsedTicks + importTime) / (Stopwatch.Frequency/1000.0);
+
         Console.WriteLine(
             $"Part {part.Pastel(Color.LightSkyBlue)}: " + suffix +
-            $"{"(took ".Pastel(Color.Gray)}{stopwatch.ElapsedMilliseconds.ToString().Pastel(Color.LightSkyBlue)}{" ms)".Pastel(Color.Gray)}");
+            $"{"(".Pastel(Color.Gray)}{time.ToString("0.0").Pastel(Color.LightSkyBlue)}{" ms)".Pastel(Color.Gray)}");
 
         Console.WriteLine(result);
     }
