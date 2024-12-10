@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using AdventOfCode2024.Days;
+using System.Collections;
 using System.Text;
 using VectorInt;
 
@@ -108,5 +109,32 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
     }
     public bool IsValidCoord(VectorInt2 position) {
         return IsValidCoord(position.X, position.Y);
+    }
+
+    public static Grid<T> FromChars(string[] chars, Func<char, T> transform) {
+        var height = chars.Length;
+        var width = chars[0].Length;
+
+        var grid = new Grid<T>(width, height);
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                grid[x, y] = transform(chars[y][x]);
+            }
+        }
+
+        return grid;
+    }
+
+    public VectorInt2 PositionOf(T value) {
+        var comparer = EqualityComparer<T>.Default;
+        for (int y = 0; y < Height; y++) {
+            for (int x = 0; x < Width; x++) {
+                if (comparer.Equals(value, _data[x, y])) {
+                    return new(x, y);
+                }
+            }
+        }
+        return new(-1, -1);
     }
 }

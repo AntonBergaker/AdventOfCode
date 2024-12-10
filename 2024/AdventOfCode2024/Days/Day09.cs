@@ -5,7 +5,7 @@ using System.Drawing;
 namespace AdventOfCode2024.Days;
 public class Day09 : DayTextBase<int[]> {
     public override int[] Import(string input) {
-        return input.Select(x => x - '0').ToArray(); // Funny way to convert char to int... but doesn't create garbage like ToString() and int.Parse() would.
+        return input.Select(x => x.ToInt()).ToArray();
     }
 
     public override string Part1(int[] input) {

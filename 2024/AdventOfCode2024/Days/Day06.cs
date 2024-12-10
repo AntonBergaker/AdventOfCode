@@ -8,35 +8,23 @@ namespace AdventOfCode2024.Days;
 public class Day06 : DayLineBase<Day06.InputData> {
     public enum Cell {
         Empty,
+        StartPosition,
         Wall
     }
 
     public record InputData(VectorInt2 StartPosition, Grid<Cell> Cells);
 
     public override InputData Import(string[] input) {
-        var height = input.Length;
-        var width = input[0].Length;
-
-        var grid = new Grid<Cell>(width, height);
-        var startPosition = new VectorInt2(-1, -1);
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                var @char = input[y][x];
-
-                if (@char == '#') {
-                    grid[x, y] = Cell.Wall;
-                } else if (@char == '.') {
-                    grid[x, y] = Cell.Empty;
-                } else if (@char == '^') {
-                    grid[x, y] = Cell.Empty;
-                    startPosition = new(x, y);
-                } else {
-                    throw new Exception($"Unexpected character in input {@char}");
-                }
-            }
-        }
-
+        var grid = Grid<Cell>.FromChars(input, @char => {
+            return @char switch {
+                '#' => Cell.Wall,
+                '.' => Cell.Empty,
+                '^' => Cell.StartPosition,
+                _ => throw new Exception($"Unexpected character in input {@char}")
+            };
+        });
+        var startPosition = grid.PositionOf(Cell.StartPosition);
+        grid[startPosition] = Cell.Empty;
         return new(startPosition, grid);
     }
 

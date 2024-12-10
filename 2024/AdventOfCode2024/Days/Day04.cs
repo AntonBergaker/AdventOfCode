@@ -5,16 +5,7 @@ using VectorInt;
 namespace AdventOfCode2024.Days;
 public class Day04 : DayLineBase<Grid<char>> {
     public override Grid<char> Import(string[] input) {
-        var height = input.Length;
-        var width = input[0].Length;
-        
-        var grid = new Grid<char>(width, height);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                grid[x, y] = input[y][x];
-            }
-        }
-        return grid;
+        return Grid<char>.FromChars(input, x => x);
     }
 
     public override string Part1(Grid<char> grid) {

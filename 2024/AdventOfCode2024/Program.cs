@@ -12,6 +12,7 @@ RunDay<Day05>(05);
 RunDay<Day07>(07);
 RunDay<Day08>(08);
 RunDay<Day09>(09);
+RunDay<Day10>(10);
 
 static void RunDay<TDay>(int dayNumber) where TDay: IDay, new() {
     var day = new TDay();
