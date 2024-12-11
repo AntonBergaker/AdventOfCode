@@ -29,6 +29,18 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
         Height = height;
     }
 
+    public Grid(T[,] array) : this(array.GetLength(0), array.GetLength(1)) {
+        array.CopyTo(_data, 0);
+    }
+
+    public Grid(T[][] array) : this(array[0].Length, array.Length) {
+        for (int y = 0; y < Height; y++) {
+            for (int x = 0; x < Width; x++) {
+                _data[x, y] = array[y][x];
+            }
+        }
+    }
+
     public Grid(VectorInt2 size) : this(size.X, size.Y) {
     }
 

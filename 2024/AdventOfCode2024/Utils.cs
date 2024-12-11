@@ -10,4 +10,13 @@ public static class Utils {
         // Funny way to convert char to int... but doesn't create garbage like ToString() and int.Parse() would.
         return @char - '0'; 
     }
+
+    public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, Func<TValue> createFunction) where TKey: notnull {
+        if (dictionary.TryGetValue(key, out var value)) {
+            return value;
+        }
+        value = createFunction();
+        dictionary.Add(key, value);
+        return value;
+    }
 }
