@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="InterpolatedParser" Version="1.1.2" />
+    <PackageReference Include="InterpolatedParser" Version="1.1.3" />
     <PackageReference Include="Pastel" Version="6.0.0" />
-    <PackageReference Include="VectorInt" Version="0.1.8" />
+    <PackageReference Include="VectorT" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>

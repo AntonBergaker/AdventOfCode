@@ -1,9 +1,8 @@
 ﻿using AdventOfCode2024.Days;
 using System.Collections;
 using System.Text;
-using VectorInt;
 
-namespace AdventOfCode2024; 
+namespace AdventOfCode2024;
 
 /// <summary>
 /// Because it seems every task needs a grid
@@ -18,7 +17,7 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
         set => _data[x, y] = value;
     }
 
-    public T this[VectorInt2 point] {
+    public T this[Vector2Int point] {
         get => _data[point.X, point.Y];
         set => _data[point.X, point.Y] = value;
     }
@@ -41,10 +40,10 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
         }
     }
 
-    public Grid(VectorInt2 size) : this(size.X, size.Y) {
+    public Grid(Vector2Int size) : this(size.X, size.Y) {
     }
 
-    public VectorInt2 Size => new(Width, Height);
+    public Vector2Int Size => new(Width, Height);
 
     public IEnumerator<T> GetEnumerator() {
         return _data.Cast<T>().GetEnumerator();
@@ -60,22 +59,22 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
         return clone;
     }
 
-    public IEnumerable<VectorInt2> GetPositionNeighbors(VectorInt2 pos) {
+    public IEnumerable<Vector2Int> GetPositionNeighbors(Vector2Int pos) {
         if (pos.X > 0) {
-            yield return pos + new VectorInt2(-1, 0);
+            yield return pos + new Vector2Int(-1, 0);
         }
         if (pos.X < Width - 1) {
-            yield return pos + new VectorInt2(1, 0);
+            yield return pos + new Vector2Int(1, 0);
         }
         if (pos.Y > 0) {
-            yield return pos + new VectorInt2(0, -1);
+            yield return pos + new Vector2Int(0, -1);
         }
         if (pos.Y < Height - 1) {
-            yield return pos + new VectorInt2(0, 1);
+            yield return pos + new Vector2Int(0, 1);
         }
     }
 
-    public IEnumerable<VectorInt2> GetPositions() {
+    public IEnumerable<Vector2Int> GetPositions() {
         for (int y = 0; y < Height; y++) {
             for (int x = 0; x < Width; x++) {
                 yield return new(x, y);
@@ -91,7 +90,7 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
         return ToGridString((x, _) => toStringFunc(x));
     }
 
-    public string ToGridString(Func<T, VectorInt2, string> toStringFunc) { 
+    public string ToGridString(Func<T, Vector2Int, string> toStringFunc) { 
         var sb = new StringBuilder();
         for (int y = 0; y < Height; y++) {
             if (y > 0) {
@@ -119,7 +118,7 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
     public bool IsValidCoord(int x, int y) {
         return x >= 0 && y >= 0 && x < Width && y < Height;
     }
-    public bool IsValidCoord(VectorInt2 position) {
+    public bool IsValidCoord(Vector2Int position) {
         return IsValidCoord(position.X, position.Y);
     }
 
@@ -138,7 +137,7 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
         return grid;
     }
 
-    public VectorInt2 PositionOf(T value) {
+    public Vector2Int PositionOf(T value) {
         var comparer = EqualityComparer<T>.Default;
         for (int y = 0; y < Height; y++) {
             for (int x = 0; x < Width; x++) {

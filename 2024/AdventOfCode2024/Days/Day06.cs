@@ -1,8 +1,7 @@
 ﻿using Pastel;
 using System.Drawing;
 using System.Numerics;
-using VectorInt;
-using PositionDirection = (VectorInt.VectorInt2 Position, VectorInt.VectorInt2 Direction);
+using PositionDirection = (VectorT.Vector2<int> Position, VectorT.Vector2<int> Direction);
 
 namespace AdventOfCode2024.Days;
 public class Day06 : DayLineBase<Day06.InputData> {
@@ -12,7 +11,7 @@ public class Day06 : DayLineBase<Day06.InputData> {
         Wall
     }
 
-    public record InputData(VectorInt2 StartPosition, Grid<Cell> Cells);
+    public record InputData(Vector2Int StartPosition, Grid<Cell> Cells);
 
     public override InputData Import(string[] input) {
         var grid = Grid<Cell>.FromChars(input, @char => {
@@ -64,16 +63,16 @@ public class Day06 : DayLineBase<Day06.InputData> {
         return true;
     }
 
-    private VectorInt2[] GetGuardWalkingPositions(InputData input) {
+    private Vector2Int[] GetGuardWalkingPositions(InputData input) {
         return IterateMaze(input).Select(x => x.Position).Distinct().ToArray();
     }
 
     private static IEnumerable<PositionDirection> IterateMaze(InputData input) {
         var (position, cells) = input;
-        var direction = new VectorInt2(0, -1);
+        var direction = new Vector2Int(0, -1);
 
         while (true) {
-            Vector2 next = position + direction;
+            Vector2Int next = position + direction;
 
             // You're free
             if (cells.IsValidCoord(next) == false) {

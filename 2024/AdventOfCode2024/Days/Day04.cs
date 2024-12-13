@@ -1,6 +1,5 @@
 ﻿using Pastel;
 using System.Drawing;
-using VectorInt;
 
 namespace AdventOfCode2024.Days;
 public class Day04 : DayLineBase<Grid<char>> {
@@ -9,7 +8,7 @@ public class Day04 : DayLineBase<Grid<char>> {
     }
 
     public override string Part1(Grid<char> grid) {
-        VectorInt2[] directions = [
+        Vector2Int[] directions = [
             new(-1, -1), new(0, -1), new(1, -1),
             new(-1,  0),             new(1,  0),
             new(-1,  1), new(0,  1), new(1,  1),
@@ -34,7 +33,7 @@ public class Day04 : DayLineBase<Grid<char>> {
     }
 
     public override string Part2(Grid<char> grid) {
-        VectorInt2[] directions = [new(-1, -1), new(-1, 1)];
+        Vector2Int[] directions = [new(-1, -1), new(-1, 1)];
 
         var total = 0;
 
@@ -43,7 +42,7 @@ public class Day04 : DayLineBase<Grid<char>> {
                 if (grid[x, y] != 'A') {
                     continue;
                 }
-                var pos = new VectorInt2(x, y);
+                var pos = new Vector2Int(x, y);
 
                 // Check X shape by checking both directions
                 if (directions.All(x =>
@@ -58,7 +57,7 @@ public class Day04 : DayLineBase<Grid<char>> {
         return $"Occurrences of X-MAS: {total.ToString().Pastel(Color.Yellow)}";
     }
 
-    private bool GridMatchesLetters(Grid<char> grid, VectorInt2 position, VectorInt2 direction, string letters) {
+    private bool GridMatchesLetters(Grid<char> grid, Vector2Int position, Vector2Int direction, string letters) {
         for (int i = 0; i < letters.Length; i++) {
             if (grid.IsValidCoord(position) == false) {
                 return false;

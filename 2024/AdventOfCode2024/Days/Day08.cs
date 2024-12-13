@@ -1,14 +1,13 @@
 ﻿using Pastel;
 using System.Drawing;
-using VectorInt;
 
 namespace AdventOfCode2024.Days;
 public class Day08 : DayLineBase<Day08.GridData> {
-    public record GridData(Dictionary<char, List<VectorInt2>> Positions, VectorInt2 Size);
+    public record GridData(Dictionary<char, List<Vector2Int>> Positions, Vector2Int Size);
 
     public override GridData Import(string[] input) {
         // Put every signal position in a dictionary with the type of signal as the key
-        var dict = new Dictionary<char, List<VectorInt2>>();
+        var dict = new Dictionary<char, List<Vector2Int>>();
         var height = input.Length;
         var width = input[0].Length;
         for (int y = 0; y < height; y++) {
@@ -28,7 +27,7 @@ public class Day08 : DayLineBase<Day08.GridData> {
     }
 
     public override string Part1(GridData input) {
-        var antinodePositions = new HashSet<VectorInt2>();
+        var antinodePositions = new HashSet<Vector2Int>();
 
         foreach (var (_, positions) in input.Positions) {
             CompareAntennas(positions, (antenna0, antenna1) => {
@@ -44,7 +43,7 @@ public class Day08 : DayLineBase<Day08.GridData> {
     }
 
     public override string Part2(GridData input) {
-        var antinodePositions = new HashSet<VectorInt2>();
+        var antinodePositions = new HashSet<Vector2Int>();
 
         foreach (var (_, positions) in input.Positions) {
             CompareAntennas(positions, (antenna0, antenna1) => {
@@ -63,7 +62,7 @@ public class Day08 : DayLineBase<Day08.GridData> {
         return $"Total number of antinode positions: {antinodePositions.Count.ToString().Pastel(Color.Yellow)}";
     }
 
-    private void CompareAntennas(List<VectorInt2> positions, Action<VectorInt2, VectorInt2> func) {
+    private void CompareAntennas(List<Vector2Int> positions, Action<Vector2Int, Vector2Int> func) {
         for (int i = 0; i < positions.Count; i++) {
             for (int j = i + 1; j < positions.Count; j++) {
                 var position0 = positions[i];

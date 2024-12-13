@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VectorInt;
 
 namespace AdventOfCode2024.Days;
 public class Day10 : DayLineBase<Grid<int>> {
@@ -34,7 +33,7 @@ public class Day10 : DayLineBase<Grid<int>> {
         return $"Total trailhead rankings: {total.ToString().Pastel(Color.Yellow)}";
     }
 
-    private static IEnumerable<VectorInt2> FindTops(Grid<int> grid, VectorInt2 position, int currentHeight) {
+    private static IEnumerable<Vector2Int> FindTops(Grid<int> grid, Vector2Int position, int currentHeight) {
         if (currentHeight >= 9) {
             return [position];
         }
