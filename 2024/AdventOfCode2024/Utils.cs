@@ -20,4 +20,14 @@ public static class Utils {
         dictionary.Add(key, value);
         return value;
     }
+
+    /// <summary>
+    /// Modulus but it keeps negative inputs within the bound of 0 - (size-1)
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="size"></param>
+    /// <returns></returns>
+    public static int Wrap(this int value, int size) {
+        return (value % size + size) % size;
+    }
 }
