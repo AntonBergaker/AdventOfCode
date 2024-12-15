@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace AdventOfCode2024;
+﻿namespace AdventOfCode2024;
 public static class Utils {
 
     public static bool IsInsideBounds(Vector2Int position, Vector2Int size) {

@@ -137,6 +137,10 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
         return grid;
     }
 
+    public static Grid<T> FromChars(string chars, Func<char, T> transform) {
+        return FromChars(chars.TrimEnd().Split(["\r\n", "\n"], StringSplitOptions.None), transform);
+    }
+
     public Vector2Int PositionOf(T value) {
         var comparer = EqualityComparer<T>.Default;
         for (int y = 0; y < Height; y++) {
