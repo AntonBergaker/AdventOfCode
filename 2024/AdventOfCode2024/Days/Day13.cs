@@ -1,7 +1,4 @@
-﻿// How strange that this file and only this file uses LF line endings.
-// I'm sure it doesn't mean anything...
-
-using InterpolatedParsing;
+﻿using InterpolatedParsing;
 using Pastel;
 using System.Drawing;
 using Vector2Long = VectorT.Vector2<long>;
@@ -12,7 +9,13 @@ public class Day13 : DayTextBase<Day13.ClawParameter[]> {
     public record ClawParameter(Vector2Long Target, Vector2Long DeltaA, Vector2Long DeltaB);
 
     public override ClawParameter[] Import(string input) {
-        var split = input.Split("\n\n");
+        // Since string literals use the newline of the source file, this is a scuffed way to find out what the interpolated parser sees.
+        var newline = """
+
+
+            """;
+
+        var split = input.ReplaceLineEndings(newline).Split(newline + newline);
         return split.Select(x => {
             int targetX = 0, targetY = 0, deltaAX = 0, deltaAY = 0, deltaBX = 0, deltaBY = 0;
             InterpolatedParser.Parse(x, $"""

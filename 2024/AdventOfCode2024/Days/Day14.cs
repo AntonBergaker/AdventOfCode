@@ -1,11 +1,11 @@
-﻿using InterpolatedParsing;
+﻿using AdventOfCode2024.Util;
+using InterpolatedParsing;
 using Pastel;
 using System.Drawing;
-using static AdventOfCode2024.Days.Day14;
 
 namespace AdventOfCode2024.Days;
 
-public class Day14 : DayLineBase<(Vector2Int Size, RobotData[] Robots)> {
+public class Day14 : DayLineBase<(Vector2Int Size, Day14.RobotData[] Robots)> {
     public record RobotData {
         public Vector2Int Position;
         public Vector2Int Velocity;

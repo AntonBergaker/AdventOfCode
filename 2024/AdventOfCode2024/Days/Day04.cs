@@ -1,4 +1,5 @@
-﻿using Pastel;
+﻿using AdventOfCode2024.Util;
+using Pastel;
 using System.Drawing;
 
 namespace AdventOfCode2024.Days;

@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2024;
+﻿namespace AdventOfCode2024.Util;
 public static class Utils {
 
     public static bool IsInsideBounds(Vector2Int position, Vector2Int size) {
@@ -7,10 +7,10 @@ public static class Utils {
 
     public static int ToInt(this char @char) {
         // Funny way to convert char to int... but doesn't create garbage like ToString() and int.Parse() would.
-        return @char - '0'; 
+        return @char - '0';
     }
 
-    public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, Func<TValue> createFunction) where TKey: notnull {
+    public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, Func<TValue> createFunction) where TKey : notnull {
         if (dictionary.TryGetValue(key, out var value)) {
             return value;
         }

@@ -1,5 +1,5 @@
-﻿using Pastel;
-using System.ComponentModel.DataAnnotations;
+﻿using AdventOfCode2024.Util;
+using Pastel;
 using System.Drawing;
 
 namespace AdventOfCode2024.Days;
@@ -13,7 +13,7 @@ public class Day15 : DayTextBase<Day15.InputData> {
         Wall
     }
 
-    public record InputData(Grid<Cell> Map, Vector2Int StartPosition, Vector2Int[] Movements);
+    public record InputData(Grid<Cell> Map, Vector2Int StartPosition, Direction[] Movements);
 
     public override InputData Import(string input) {
         var parts = input.Split(["\r\n\r\n", "\n\n"], StringSplitOptions.None);
@@ -26,10 +26,10 @@ public class Day15 : DayTextBase<Day15.InputData> {
         });
 
         var movements = parts[1].ReplaceLineEndings("").Select(x => x switch {
-            '<' => new Vector2Int(-1, 0),
-            '^' => new Vector2Int(0, -1),
-            '>' => new Vector2Int(1, 0),
-            'v' => new Vector2Int(0, 1),
+            '<' => Direction.West,
+            '^' => Direction.North,
+            '>' => Direction.East,
+            'v' => Direction.South,
             _ => throw new NotImplementedException()
         }).ToArray();
 
@@ -67,10 +67,10 @@ public class Day15 : DayTextBase<Day15.InputData> {
         RunMovementsOnMap(map, input.StartPosition * scale, input.Movements);
 
         var total = map.GetPositions().Where(x => map[x] is Cell.Box or Cell.BoxL).Sum(x => x.X + x.Y * 100);
-        return $"Sum of all boxes GPS coordinates: {total.ToString().Pastel(Color.Yellow)}";
+        return $"Sum of all scaled up boxes GPS coordinates: {total.ToString().Pastel(Color.Yellow)}";
     }
 
-    private static void RunMovementsOnMap(Grid<Cell> map, Vector2Int position, Vector2Int[] movements) {
+    private static void RunMovementsOnMap(Grid<Cell> map, Vector2Int position, Direction[] movements) {
         foreach (var direction in movements) {
             if (TryGetMovableBoxes(map, position, direction, out var boxes) == false) {
                 continue;

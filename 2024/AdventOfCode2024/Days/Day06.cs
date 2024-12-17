@@ -1,7 +1,6 @@
-﻿using Pastel;
+﻿using AdventOfCode2024.Util;
+using Pastel;
 using System.Drawing;
-using System.Numerics;
-using PositionDirection = (VectorT.Vector2<int> Position, VectorT.Vector2<int> Direction);
 
 namespace AdventOfCode2024.Days;
 public class Day06 : DayLineBase<Day06.InputData> {
@@ -69,7 +68,7 @@ public class Day06 : DayLineBase<Day06.InputData> {
 
     private static IEnumerable<PositionDirection> IterateMaze(InputData input) {
         var (position, cells) = input;
-        var direction = new Vector2Int(0, -1);
+        var direction = Direction.South;
 
         while (true) {
             Vector2Int next = position + direction;
@@ -80,11 +79,11 @@ public class Day06 : DayLineBase<Day06.InputData> {
             }
             // Rotate right if wall
             if (cells[next] == Cell.Wall) {
-                direction = new(-direction.Y, direction.X);
+                direction = direction.RotateClockwise();
                 continue;
             }
 
-            yield return (next, direction);
+            yield return new(next, direction);
             position = next;
         }
     }

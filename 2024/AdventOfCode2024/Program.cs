@@ -18,6 +18,7 @@ RunDay<Day12>(12);
 RunDay<Day13>(13);
 RunDay<Day14>(14);
 RunDay<Day15>(15);
+RunDay<Day16>(16);
 static void RunDay<TDay>(int dayNumber) where TDay: IDay, new() {
     var day = new TDay();
 
@@ -30,8 +31,13 @@ static void RunDay<TDay>(int dayNumber) where TDay: IDay, new() {
     RunInput("Input", "");
 
     void RunInput(string folderPath, string suffix) {
+        var path = $"{folderPath}/day{dayNumber:00}.txt";
+        if (File.Exists(path) == false) {
+            Console.WriteLine($"Failed to load file: {path.Pastel(Color.Red)}");
+            return;
+        }
         var stopwatch = Stopwatch.StartNew();
-        var import = day.Import(File.ReadAllText($"{folderPath}/day{dayNumber:00}.txt"));
+        var import = day.Import(File.ReadAllText(path));
         stopwatch.Stop();
 
         RunPart("1", suffix, stopwatch.ElapsedTicks, () => day.Part1(import));

@@ -1,8 +1,7 @@
-﻿using AdventOfCode2024.Days;
-using System.Collections;
+﻿using System.Collections;
 using System.Text;
 
-namespace AdventOfCode2024;
+namespace AdventOfCode2024.Util;
 
 /// <summary>
 /// Because it seems every task needs a grid
@@ -90,7 +89,7 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
         return ToGridString((x, _) => toStringFunc(x));
     }
 
-    public string ToGridString(Func<T, Vector2Int, string> toStringFunc) { 
+    public string ToGridString(Func<T, Vector2Int, string> toStringFunc) {
         var sb = new StringBuilder();
         for (int y = 0; y < Height; y++) {
             if (y > 0) {
@@ -105,7 +104,7 @@ public class Grid<T> : IEnumerable<T>, ICloneable {
     }
 
     object ICloneable.Clone() {
-        return this.Clone();
+        return Clone();
     }
 
     public void SetAll(T value) {

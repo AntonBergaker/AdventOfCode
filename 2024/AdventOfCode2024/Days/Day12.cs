@@ -1,14 +1,12 @@
-﻿using Pastel;
+﻿using AdventOfCode2024.Util;
+using Pastel;
 using System.Drawing;
-using System.Numerics;
 
 namespace AdventOfCode2024.Days;
 public class Day12 : DayLineBase<Grid<char>> {
     public override Grid<char> Import(string[] input) {
         return Grid<char>.FromChars(input, x => x);
     }
-
-    private static readonly Vector2Int[] _directions = [new(-1, 0), new(1, 0), new(0, -1), new(0, 1)];
 
     public override string Part1(Grid<char> grid) {
         var regions = GetRegions(grid);
@@ -18,7 +16,7 @@ public class Day12 : DayLineBase<Grid<char>> {
             var totalOpenSides = 0;
             foreach (var position in region) {
                 // Need a fence for all sides that are exposed.
-                var neighbors = _directions.Count(direction => region.Contains(position + direction));
+                var neighbors = Direction.Directions.Count(direction => region.Contains(position + direction));
                 totalOpenSides += 4 - neighbors;
             }
             totalPrice += totalOpenSides * region.Count;
@@ -33,11 +31,11 @@ public class Day12 : DayLineBase<Grid<char>> {
         var totalPrice = 0;
         foreach (var region in regions) {
             var totalFences = 0;
-            var alreadyChecked = new HashSet<(Vector2Int Position, Vector2Int Direction)>();
+            var alreadyChecked = new HashSet<PositionDirection>();
 
             foreach (var position in region) {
                 // Look for fences in all directions
-                foreach (var direction in _directions) {
+                foreach (var direction in Direction.Directions) {
                     if (CountFence(region, alreadyChecked, position, direction)) {
                         totalFences++;
                     }
@@ -99,8 +97,8 @@ public class Day12 : DayLineBase<Grid<char>> {
     /// <param name="position"></param>
     /// <param name="faceDirection"></param>
     /// <returns>true if its a a valid fence, otherwise false</returns>
-    private static bool CountFence(HashSet<Vector2Int> region, HashSet<(Vector2Int Position, Vector2Int Direction)> alreadyChecked, Vector2Int position, Vector2Int faceDirection) {
-        if (alreadyChecked.Contains((position, faceDirection))) {
+    private static bool CountFence(HashSet<Vector2Int> region, HashSet<PositionDirection> alreadyChecked, Vector2Int position, Direction faceDirection) {
+        if (alreadyChecked.Contains(new (position, faceDirection))) {
             return false;
         }
         // Not a wall
@@ -109,10 +107,10 @@ public class Day12 : DayLineBase<Grid<char>> {
         }
 
         // Walk both ways
-        GoDirection(new(-faceDirection.Y, faceDirection.X));
-        GoDirection(new(faceDirection.Y, -faceDirection.X));
+        GoDirection(faceDirection.RotateClockwise());
+        GoDirection(faceDirection.RotateCounterClockwise());
 
-        void GoDirection(Vector2Int walkDirection) {
+        void GoDirection(Direction walkDirection) {
             var pos = position;
             while (region.Contains(pos)) {
                 // Not a wall anymore, thing in that way
@@ -120,7 +118,7 @@ public class Day12 : DayLineBase<Grid<char>> {
                     break;
                 }
 
-                alreadyChecked.Add((pos, faceDirection));
+                alreadyChecked.Add(new (pos, faceDirection));
                 pos += walkDirection;
             }
         }
