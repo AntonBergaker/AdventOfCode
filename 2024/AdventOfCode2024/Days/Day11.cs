@@ -2,7 +2,7 @@
 using System.Drawing;
 
 namespace AdventOfCode2024.Days;
-internal class Day11 : DayTextBase<long[]> {
+public class Day11 : DayTextBase<long[]> {
     public override long[] Import(string input) {
         return input.Split(' ').Select(x => long.Parse(x)).ToArray();
     }

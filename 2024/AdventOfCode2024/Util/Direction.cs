@@ -7,12 +7,12 @@ public readonly struct Direction : IEquatable<Direction> {
     private const byte WestValue = 2;
     private const byte NorthValue = 3;
 
+    public static readonly Direction[] Directions = [East, South, West, North];
+
     public static readonly Direction East = new(EastValue);
     public static readonly Direction South = new(SouthValue);
     public static readonly Direction West = new(WestValue);
     public static readonly Direction North = new(NorthValue);
-
-    public static readonly Direction[] Directions = [East, South, West, North];
 
     private readonly byte _value;
     private Direction(byte value) { 
@@ -68,10 +68,10 @@ public readonly struct Direction : IEquatable<Direction> {
 
     public override string ToString() {
         return _value switch {
-            0 => "East",
-            1 => "South",
-            2 => "West",
-            3 => "North",
+            EastValue => "East",
+            SouthValue => "South",
+            WestValue => "West",
+            NorthValue => "North",
             _ => throw new Exception("Invalid direction internal value")
         };
     }

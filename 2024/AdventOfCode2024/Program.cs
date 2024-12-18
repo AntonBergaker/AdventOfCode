@@ -3,12 +3,13 @@ using Pastel;
 using System.Diagnostics;
 using System.Drawing;
 
+/*
 RunDay<Day01>(01);
 RunDay<Day02>(02);
 RunDay<Day03>(03);
 RunDay<Day04>(04);
 RunDay<Day05>(05);
-//RunDay<Day06>(06);
+RunDay<Day06>(06);
 RunDay<Day07>(07);
 RunDay<Day08>(08);
 RunDay<Day09>(09);
@@ -19,6 +20,9 @@ RunDay<Day13>(13);
 RunDay<Day14>(14);
 RunDay<Day15>(15);
 RunDay<Day16>(16);
+*/
+RunDay<Day17>(17);
+
 static void RunDay<TDay>(int dayNumber) where TDay: IDay, new() {
     var day = new TDay();
 
