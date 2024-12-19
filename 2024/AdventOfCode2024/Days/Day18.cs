@@ -1,5 +1,7 @@
 ﻿using AdventOfCode2024.Util;
 using InterpolatedParsing;
+using Pastel;
+using System.Drawing;
 
 namespace AdventOfCode2024.Days;
 public class Day18 : DayLineBase<Vector2Int[]> {
@@ -25,7 +27,7 @@ public class Day18 : DayLineBase<Vector2Int[]> {
 
         int bestDistance = Pathfind(grid, start, end);
 
-        return $"{bestDistance}";
+        return $"Distance to exit after {inputLength} bytes: {bestDistance.ToString().Pastel(Color.Yellow)}";
     }
 
     public override string Part2(Vector2Int[] positions) {
@@ -48,7 +50,7 @@ public class Day18 : DayLineBase<Vector2Int[]> {
             }
         }
 
-        return $"Position that prevented escape: {last}";
+        return $"Position that prevented escape: {last.ToString().Pastel(Color.Yellow)}";
     }
 
     private static int Pathfind(Grid<bool> grid, Vector2Int start, Vector2Int end) {
