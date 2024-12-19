@@ -20,8 +20,8 @@ RunDay<Day13>(13);
 RunDay<Day14>(14);
 RunDay<Day15>(15);
 RunDay<Day16>(16);
-*/
-RunDay<Day17>(17);
+RunDay<Day17>(17); */
+RunDay<Day18>(18);
 
 static void RunDay<TDay>(int dayNumber) where TDay: IDay, new() {
     var day = new TDay();
