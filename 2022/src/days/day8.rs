@@ -1,4 +1,4 @@
-use crate::data_types::point::Point;
+use common::data_types::point::Point;
 
 pub fn day8(input_lines: Vec<&str>) {
     let mut trees: Vec<Vec<Tree>> = Vec::new();

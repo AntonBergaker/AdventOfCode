@@ -1,6 +1,8 @@
 ﻿
 using InterpolatedParsing;
 using Microsoft.Win32;
+using Pastel;
+using System.Drawing;
 using System.Linq;
 
 namespace AdventOfCode2024.Days;
@@ -38,7 +40,7 @@ public class Day17 : DayLineBase<Day17.StartupData> {
         List<int> @out = RunProgram(registerA, registerB, registerC, instructions, null);
         var a = TestSimplifiedProgram(registerA);
 
-        return $"Program output: {string.Join(',', @out)}";
+        return $"Program output: {string.Join(',', @out).Pastel(Color.Yellow)}";
     }
 
     public override string Part2(StartupData input) {
@@ -134,7 +136,7 @@ public class Day17 : DayLineBase<Day17.StartupData> {
             }
         }
 
-        return $"Maybe smallest A register value that outputs the program: {possibleAnswers.Min()}";
+        return $"Maybe smallest A register value that outputs the program: {possibleAnswers.Min().ToString().Pastel(Color.Yellow)}";
     }
 
     private static List<int> RunProgram(ulong registerA, ulong registerB, ulong registerC, int[] instructions, int[]? expectedPrints) {

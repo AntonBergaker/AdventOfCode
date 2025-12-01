@@ -1,4 +1,4 @@
-use crate::data_types::{grid::Grid, point::Point};
+use common::data_types::{grid::Grid, point::Point};
 
 pub fn day14(input_lines: Vec<&str>) {
     let point_list: Vec<Vec<Point>> = input_lines.iter().map(|x| parse_point_list(x)).collect();

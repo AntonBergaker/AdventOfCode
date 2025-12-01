@@ -1,8 +1,8 @@
-use std::{ops::{Range}, collections::HashSet, hash::Hash};
+use std::{ops::{Range}, collections::HashSet};
 
 use regex::Regex;
 
-use crate::data_types::point::Point;
+use common::data_types::point::Point;
 
 pub fn day15(input_lines: Vec<&str>) {
     // I promised I never would, yet here I go regexing.

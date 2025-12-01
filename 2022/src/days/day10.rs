@@ -1,4 +1,4 @@
-use crate::data_types::grid::Grid;
+use common::data_types::grid::Grid;
 
 pub fn day10(input_lines: Vec<&str>) {
     part1(&input_lines);

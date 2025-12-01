@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use crate::data_types::point::Point;
+use common::data_types::point::Point;
 
 pub fn day9(input_lines: Vec<&str>) {
     println!("Visited points with 2 points: {}", simulate_rope_tail_visits(&input_lines, 2));

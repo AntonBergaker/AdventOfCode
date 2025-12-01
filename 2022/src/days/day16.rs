@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet, VecDeque};
 
 use regex::Regex;
 
-use crate::data_types::grid::Grid;
+use common::data_types::grid::Grid;
 
 pub fn day16(input_lines: Vec<&str>) {
     let mut flow_nodes: Vec<FlowNode> = Vec::new();

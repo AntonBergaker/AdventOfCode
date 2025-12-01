@@ -1,6 +1,6 @@
 use std::{collections::VecDeque};
 
-use crate::data_types::{grid::Grid, point::Point};
+use common::data_types::{grid::Grid, point::Point};
 
 pub fn day12(input: &str) {
     let grid = Grid::from(input, |x| x);

@@ -3,7 +3,6 @@ use std::{fs,time::Instant};
 use colored::Colorize;
 
 mod days;
-pub mod data_types;
 
 fn main() {
     // Necessary to cast to, when function expects a Str instead of a vector
