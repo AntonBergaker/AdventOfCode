@@ -1,5 +1,3 @@
-use sscanf::sscanf;
-
 pub fn part1(input_lines: Vec<&str>) {
     let times_at_0 = evaluate(input_lines,&|clock, steps| {
         *clock += steps;
@@ -42,7 +40,7 @@ fn evaluate(input_lines: Vec<&str>, count_fun: &dyn Fn(&mut i32, i32) -> i32) ->
 
     for line in input_lines {
         let (direction, steps) =
-            sscanf!(line, "{char}{i32}").expect("a");
+            scan_fmt!(line, "{[LR]}{}", char, i32).expect("Invalid format");
         let step_mod = if direction == 'L' {-1} else {1};
         
         times_at_0 += count_fun(&mut clock, steps * step_mod)

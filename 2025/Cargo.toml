@@ -8,4 +8,4 @@ edition = "2024"
 [dependencies]
 colored = "3.0.0"
 common = { path = "../common/rust" }
-sscanf = "0.4.4"
+scan_fmt = "0.2.6"

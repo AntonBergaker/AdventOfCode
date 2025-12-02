@@ -1,3 +1,4 @@
+#[macro_use] extern crate scan_fmt;
 use std::{fs, time::Instant};
 
 use colored::Colorize;
@@ -9,6 +10,9 @@ fn main() {
 
     evaluate_day(days::day1::part1, 1);
     evaluate_day(days::day1::part2, 1);
+
+    evaluate_day(days::day2::part1 as fn(&str), 2);
+    evaluate_day(days::day2::part2 as fn(&str), 2);
 }
 
 pub trait DayInput {
@@ -20,6 +24,12 @@ impl<F: Fn(Vec<&str>)> DayInput for F {
     fn evaluate(self, input: &str) {
         let input_lines: Vec<&str> = input.lines().collect();
         self(input_lines);
+    }
+}
+
+impl DayInput for fn(&str) {
+    fn evaluate(self, input: &str) {
+        self(input.trim());
     }
 }
 
