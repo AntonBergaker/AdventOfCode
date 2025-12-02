@@ -23,65 +23,23 @@ internal class Day20 : DayTextBase<Grid<Cell>> {
         });
     }
 
-    private int GetShortestDistance(Grid<Cell> grid, Vector2Int start, Vector2Int end) {
-        // Get the shortest distance based on A*
-        Grid<bool> visited = new(grid.Size);
-
-        PriorityQueue<Vector2Int, int> queue = new();
-        queue.Enqueue(start, 0);
-
-        while (queue.TryDequeue(out var pos, out var priority)) {
-            priority -= GetHeuristic(pos);
-            if (pos == end) {
-                return priority;
-            }
-
-            foreach (var neighbour in grid.GetPositionNeighbors(pos)) {
-                if (grid[neighbour] == Cell.Wall || visited[neighbour]) {
-                    continue;
-                }
-
-                queue.Enqueue(neighbour, priority + 1 + GetHeuristic(neighbour));
-                visited[neighbour] = true;
-            }
-        }
-
-        int GetHeuristic(Vector2Int pos) {
-            return Math.Abs(pos.X - end.X) + Math.Abs(pos.Y - end.Y);
-        }
-
-        return -1;
+    private int GetDistance(Vector2Int pos0, Vector2Int pos1) {
+        return Math.Abs(pos0.X - pos1.X) + Math.Abs(pos0.Y - pos1.Y);
     }
 
     public override string Part1(Grid<Cell> grid) {
-        grid = grid.Clone();
+        var shortcutCount = GetShortcutCount(grid, 2);
 
-        var startPosition = grid.PositionOf(Cell.Start);
-        grid[startPosition] = Cell.Blank;
-        var endPosition = grid.PositionOf(Cell.End);
-        grid[endPosition] = Cell.Blank;
-
-        var normalShortest = GetShortestDistance(grid, startPosition, endPosition);
-        var numberShortenedBy100 = 0;
-
-        foreach (var position in grid.GetPositions()) {
-            if (grid[position] != Cell.Wall) {
-                continue;
-            }
-
-            grid[position] = Cell.Blank;
-            var shortest = GetShortestDistance(grid, startPosition, endPosition);
-            grid[position] = Cell.Wall;
-
-            if (normalShortest - shortest >= 100) {
-                numberShortenedBy100++;
-            }
-        }
-
-        return $"Walls removed that shortens by at least 100 picoseconds: {numberShortenedBy100.ToString().Pastel(Color.Yellow)}.";
+        return $"Shortcuts of 2 picoseconds that shortens by at least 100 picoseconds: {shortcutCount.ToString().Pastel(Color.Yellow)}.";
     }
 
     public override string Part2(Grid<Cell> grid) {
+        var shortcutCount = GetShortcutCount(grid, 20);
+
+        return $"Shortcuts of 20 picoseconds that shortens by at least 100 picoseconds: {shortcutCount.ToString().Pastel(Color.Yellow)}.";
+    }
+
+    private int GetShortcutCount(Grid<Cell> grid, int travelDistance) {
         grid = grid.Clone();
 
         var startPosition = grid.PositionOf(Cell.Start);
@@ -89,6 +47,75 @@ internal class Day20 : DayTextBase<Grid<Cell>> {
         var endPosition = grid.PositionOf(Cell.End);
         grid[endPosition] = Cell.Blank;
 
-        return $"Walls removed that shortens by at least 100 picoseconds: {numberShortenedBy100.ToString().Pastel(Color.Yellow)}.";
+        var distancesFromStart = FloodFill(grid, startPosition);
+        var distancesFromEnd = FloodFill(grid, endPosition);
+
+        var queue = new Queue<Vector2Int>();
+        queue.Enqueue(startPosition);
+        var manhattanDistances = GetPointsInManhattanRange(travelDistance);
+
+        var normalDistance = distancesFromStart[endPosition];
+        var shortcutCount = 0;
+
+        while (queue.TryDequeue(out var position)) {
+            var distance = distancesFromStart[position];
+            foreach (var neighbor in grid.GetPositionNeighbors(position)) {
+                if (distancesFromStart[neighbor] < distance) {
+                    continue;
+                }
+                queue.Enqueue(neighbor);
+            }
+
+            // Scan the nearest 20 grids
+            foreach (var movement in manhattanDistances) {
+                var newPosition = position + movement;
+                if (grid.IsValidCoord(newPosition) == false || grid[newPosition] == Cell.Wall) {
+                    continue;
+                }
+
+                var totalDistance = distancesFromStart[position] + distancesFromEnd[newPosition] + GetDistance(position, newPosition);
+                if (normalDistance - totalDistance >= 100) {
+                    shortcutCount++;
+                }
+            }
+        }
+
+        return shortcutCount;
+    }
+
+    List<Vector2Int> GetPointsInManhattanRange(int range) {
+        var list = new List<Vector2Int>();
+
+        for (int x = -range; x <= range; x++) {
+            int yWidth = range - Math.Abs(x);
+
+            for (int y = -yWidth; y <= yWidth; y++) {
+                list.Add(new(x, y));
+            }
+        }
+
+        return list;
+    }
+
+    private Grid<int> FloodFill(Grid<Cell> grid, Vector2Int fillStartPosition) {
+        var distances = new Grid<int>(grid.Size);
+        distances.SetAll(-1);
+
+        var queue = new Queue<Vector2Int>();
+        queue.Enqueue(fillStartPosition);
+        distances[fillStartPosition] = 0;
+
+        while (queue.TryDequeue(out var position)) {
+            var myValue = distances[position];
+            foreach (var neighbor in grid.GetPositionNeighbors(position)) {
+                if (grid[neighbor] == Cell.Wall || distances[neighbor] >= 0) {
+                    continue;
+                }
+
+                distances[neighbor] = myValue + 1;
+                queue.Enqueue(neighbor);
+            }
+        }
+        return distances;
     }
 }
