@@ -1,50 +1,58 @@
 #[macro_use] extern crate scan_fmt;
+
 use std::{fs, time::Instant};
 
 use colored::Colorize;
 
+use crate::days::{day::Day};
+#[macro_use]
+pub mod highlight_part;
 mod days;
 
 fn main() {
     println!("Hello, world!");
 
-    evaluate_day(days::day1::part1, 1);
-    evaluate_day(days::day1::part2, 1);
-
-    evaluate_day(days::day2::part1 as fn(&str), 2);
-    evaluate_day(days::day2::part2 as fn(&str), 2);
+    evaluate_day::<days::day1::Day1>(1);
+    evaluate_day::<days::day2::Day2>(2);
+    evaluate_day::<days::day3::Day3>(3);
 }
 
-pub trait DayInput {
-    fn evaluate(self, input: &str);
+fn evaluate_day<D: Day>(index: usize) {
+    evaluate_day_with_data::<D>("test_input", " (test)", index);
+    evaluate_day_with_data::<D>("input", "", index);
 }
 
-// Can be implicitly converted
-impl<F: Fn(Vec<&str>)> DayInput for F {
-    fn evaluate(self, input: &str) {
-        let input_lines: Vec<&str> = input.lines().collect();
-        self(input_lines);
-    }
-}
+fn evaluate_day_with_data<D: Day>(folder: &str, message: &str, index: usize) {
+    println!("{}", format!("Day {}{}:", index, message).blue().bold());
 
-impl DayInput for fn(&str) {
-    fn evaluate(self, input: &str) {
-        self(input.trim());
-    }
-}
-
-fn evaluate_day<T: DayInput>(function: T, day: i32) {
-    println!("{}", format!("Day {}:", day).blue().bold());
-    println!();
-
-    let input_path = format!("input/day{}.txt", day);
-    let input = fs::read_to_string(input_path).expect(&format!("Failed to load input for day {}", day));
+    let input_path = format!("{}/day{}.txt", folder, index);
+    
+    let input = match fs::read_to_string(input_path) {
+        Ok(input) => input,
+        Err(_) => {
+            println!();
+            println!("{}", format!("Failed to import day {}", index).bright_red().italic());
+            println!();
+            return;
+        }
+    };
     
     let start = Instant::now();
-
-    function.evaluate(&input);
-
+    let data = D::import(input.as_str());
+    println!("{}", format!("Import took {} ms", start.elapsed().as_millis()).bright_black().italic());
     println!();
-    println!("{}", format!("Took: {} ms", start.elapsed().as_millis()).bright_black().italic());
+
+    evaluate_part(D::part1, &data, 1);
+    evaluate_part(D::part2, &data, 2);
+}
+
+fn evaluate_part<T, F: Fn(&T) -> String>(function: F, data: &T, part: usize) {
+    let start = Instant::now();
+
+    let result = function(data);
+
+    println!("{} {}", format!("Part {}:", part).bright_magenta(), format!("({} ms)", start.elapsed().as_millis()).bright_black().italic() );
+    println!("{}", result);
+
     println!();
 }
