@@ -12,9 +12,10 @@ mod days;
 fn main() {
     println!("Hello, world!");
 
-    evaluate_day::<days::day1::Day1>(1);
-    evaluate_day::<days::day2::Day2>(2);
-    evaluate_day::<days::day3::Day3>(3);
+    //evaluate_day::<days::day1::Day1>(1);
+    //evaluate_day::<days::day2::Day2>(2);
+    //evaluate_day::<days::day3::Day3>(3);
+    evaluate_day::<days::day4::Day4>(4);
 }
 
 fn evaluate_day<D: Day>(index: usize) {

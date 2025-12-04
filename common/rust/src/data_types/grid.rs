@@ -74,6 +74,47 @@ impl<T> Grid<T> {
     pub fn point_is_inside(&self, point: Point) -> bool {
         return point.x >= 0 && point.y >= 0 && point.x < self.width as i64 && point.y < self.height as i64;
     }
+
+    pub fn get_point_neighbors(&self, point: Point) -> impl Iterator<Item = Point> {
+        const POINTS: [(i64, i64); 4] = [(-1, 0), (1, 0), (0, -1), (0, 1)];
+        
+        return POINTS.into_iter().filter_map(move |p| {
+            let neighbor = point + Point::new(p.0, p.1);
+            if self.point_is_inside(neighbor) {
+                Some(point)
+            } else {
+                None
+            }
+        });
+    }
+
+    pub fn get_point_neighbors_diagonal(&self, point: Point) -> impl Iterator<Item = Point> {
+        const POINTS: [(i64, i64); 8] = [
+            (-1,  0),
+            ( 1,  0),
+            ( 0, -1),
+            ( 0,  1),
+            (-1, -1),
+            ( 1, -1),
+            (-1,  1),
+            ( 1,  1),
+        ];
+        
+        return POINTS.into_iter().filter_map(move |p| {
+            let neighbor = point + Point::new(p.0, p.1);
+            if self.point_is_inside(neighbor) {
+                Some(point)
+            } else {
+                None
+            }
+        });
+    }
+
+    pub fn get_all_points(&self) -> impl Iterator<Item = Point> {
+        (0..self.height()).flat_map(move |y| {
+            (0..self.width()).map(move |x| Point::new(x as i64, y as i64))
+        })
+    }
 }
 
 impl<T: PartialEq> Grid<T> {
