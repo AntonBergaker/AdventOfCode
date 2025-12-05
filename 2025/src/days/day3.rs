@@ -2,7 +2,6 @@ use crate::days::day::Day;
 
 pub struct Day3;
 
-
 impl Day for Day3 {
     type Input = Vec<Vec<i32>>;
     fn import(input: &str) -> Vec<Vec<i32>> {
