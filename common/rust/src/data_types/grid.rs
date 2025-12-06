@@ -59,6 +59,42 @@ impl<T:Copy> Grid<T> {
         }
         return str;
     }
+
+    pub fn clone_region(&self, start: Point, end: Point) -> Self {
+        let size = end - start;
+
+        let mut new_grid_data = Vec::new();
+
+        for y in 0..size.y {
+            for x in 0..size.x {
+                new_grid_data.push(self[start + Point::new(x, y)].clone());
+            }
+        }
+        
+        return Self {
+            data: new_grid_data,
+            width: size.x as usize,
+            height: size.y as usize
+        };
+    }
+
+    pub fn rotate(&self) -> Self {
+        let new_size = Point::new(self.height, self.width);
+
+        let mut new_grid_data = Vec::new();
+
+        for y in 0..new_size.y {
+            for x in 0..new_size.x {
+                new_grid_data.push(self[Point::new(y, new_size.x - x - 1)].clone());
+            }
+        }
+        
+        return Self {
+            data: new_grid_data,
+            width: new_size.x as usize,
+            height: new_size.y as usize
+        };
+    }
 }
 
 

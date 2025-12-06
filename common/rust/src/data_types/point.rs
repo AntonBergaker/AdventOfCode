@@ -1,4 +1,5 @@
 use std::ops;
+use std::fmt::Debug;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 pub struct Point {
@@ -46,10 +47,10 @@ impl ops::SubAssign for Point {
 
 
 impl Point {
-    pub fn new(x: i64, y: i64) -> Self {
+    pub fn new<T>(x: T, y: T) -> Self where T: TryInto<i64>, T::Error: Debug {
         Self {
-            x: x,
-            y: y
+            x: x.try_into().expect("Number too large for i64"),
+            y: y.try_into().expect("Number too large for i64")
         }
     }
 }
