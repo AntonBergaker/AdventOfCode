@@ -18,7 +18,8 @@ fn main() {
     //evaluate_day::<days::day4::Day4>(4);
     //evaluate_day::<days::day5::Day5>(5);
     //evaluate_day::<days::day6::Day6>(6);
-    evaluate_day::<days::day7::Day7>(7);
+    //evaluate_day::<days::day7::Day7>(7);
+    evaluate_day::<days::day8::Day8>(8);
 }
 
 fn evaluate_day<D: Day>(index: usize) {
