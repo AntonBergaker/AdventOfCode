@@ -1,7 +1,5 @@
 use core::f32;
-use std::{collections::{HashMap, HashSet}, error::Error};
-
-use common::data_types::grid::Grid;
+use std::{collections::{HashMap}, error::Error};
 
 use crate::days::day::Day;
 
