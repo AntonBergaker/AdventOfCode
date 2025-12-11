@@ -9,4 +9,5 @@ edition = "2024"
 colored = "3.0.0"
 common = { path = "../common/rust" }
 good_lp = { version = "1.14.2", features = ["microlp"], default-features = false }
+priority-queue = "2.7.0"
 scan_fmt = "0.2.6"

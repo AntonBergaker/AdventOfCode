@@ -1,6 +1,3 @@
-use std::i32;
-
-
 use good_lp::{Expression, Solution, SolverModel, Variable, variable, variables};
 
 use crate::days::day::Day;
