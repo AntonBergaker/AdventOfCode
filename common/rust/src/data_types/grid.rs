@@ -95,6 +95,22 @@ impl<T:Copy> Grid<T> {
             height: new_size.y as usize
         };
     }
+
+    pub fn flip(&self) -> Self {
+        let mut new_grid_data = Vec::new();
+
+        for y in 0..self.height {
+            for x in 0..self.width {
+                new_grid_data.push(self[Point::new(self.width - x - 1, y)].clone());
+            }
+        }
+        
+        return Self {
+            data: new_grid_data,
+            width: self.width,
+            height: self.height
+        };
+    }
 }
 
 
@@ -159,8 +175,6 @@ impl<T: PartialEq> Grid<T> {
         return Point::new((index % self.width) as i64, (index / self.width) as i64);
     }
 }
-
-
 
 impl<T> Index<(usize, usize)> for Grid<T> {
     type Output = T;

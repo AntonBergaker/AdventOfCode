@@ -10,11 +10,13 @@ pub mod highlight_part;
 mod days;
 
 
-//const ONLY_DAY: Option<usize> = None;
-const ONLY_DAY: Option<usize> = Some(11);
+const ONLY_DAY: Option<usize> = None;
+//const ONLY_DAY: Option<usize> = Some(12);
 
 fn main() {
     println!("Hello, world!");
+
+    let start = Instant::now();
 
     evaluate_day::<days::day1::Day1>(1);
     evaluate_day::<days::day2::Day2>(2);
@@ -27,6 +29,10 @@ fn main() {
     evaluate_day::<days::day9::Day9>(9);
     evaluate_day::<days::day10::Day10>(10);
     evaluate_day::<days::day11::Day11>(11);
+    evaluate_day::<days::day12::Day12>(12);
+
+    let time = start.elapsed().as_millis();
+    println!("Time to run all days: {} ms", time);
 }
 
 fn evaluate_day<D: Day>(index: usize) {
